@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>IdentityIQ Documentation Generator</name>
+  <description>IdentityIQ Documentation Generator</description>
+
+  <!-- The groupId, artifactId, version is sourced from when the project is instantiated.-->
+  <groupId>sailpoint</groupId>
+  <artifactId>identityiq-documentation-generator</artifactId>
+  <version>20230119.0.1</version>
+
+  <!-- Set build properties here. For the most part, you should only need to set the version numbers
+  for dependencies here. -->
+  <properties>
+    <!-- Versions for various dependencies are set here -->
+    <log4j.version>2.19.0</log4j.version>
+    <compiler.source.version>1.8</compiler.source.version>
+    <compiler.target.version>1.8</compiler.target.version>
+    <org.glassfish.jersey.version>2.38</org.glassfish.jersey.version>
+    <mysql.jdbc.version>8.0.31</mysql.jdbc.version>
+  </properties>
+
+  <dependencies>
+    <!--
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-api</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-core</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-1.2-api</artifactId>
+      <version>${log4j.version}</version>
+    <scope>test</scope>
+    </dependency>
+    <dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-jcl</artifactId>
+    <version>${log4j.version}</version>
+    </dependency>
+    <dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-to-slf4j</artifactId>
+    <version>${log4j.version}</version>
+    </dependency>
+    -->
+    <!-- https://mvnrepository.com/artifact/com.cronutils/cron-utils -->
+    <dependency>
+      <groupId>com.cronutils</groupId>
+      <artifactId>cron-utils</artifactId>
+      <version>9.2.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/xalan/xalan -->
+    <dependency>
+      <groupId>xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <version>2.7.2</version>
+    </dependency>
+  </dependencies>
+
+  <!-- Plugins for build -->
+  <build>
+    <plugins>
+      <!-- Compiler settings -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
+        <configuration>
+          <source>${compiler.source.version}</source>
+          <target>${compiler.target.version}</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <finalName>IdentityIQDocumentationGenerator</finalName>
+        </configuration>
+      </plugin>
+
+      <!-- any other plugins -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.1.1</version>
+        <executions>
+          <execution>
+            <id>jar-with-dependencies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
+              <finalName>IdentityIQDocumentationGenerator</finalName>
+              <archive>
+                <manifest>
+                  <mainClass>org.apache.xalan.xslt.Process</mainClass>
+                </manifest>
+              </archive>
+            </configuration>
+          </execution>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>build-config/assembly/connector-files.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+</project>
