@@ -2,6 +2,14 @@
 
 This tool allows customers and implementers to automatically create documentation for their IdentityIQ configuration, based on XML configuration files. These files should be merged into a single XML document.
 
+## Provided Files
+
+The tool is distributed as a zip file named like `identityiq-documentation-generator-<version>-bin.zip`. In this zip file, there are three main folders: `doc` containing this README.md file, `lib` containing the main jar file, and `xslt` containing all the XSLT stylesheets.
+
+The jar file will be named `IdentityIQDocumentationGenerator.jar`. This file contains all the necessary dependencies.
+
+The main stylesheet is `IdentityIQ-Documenter.xsl`, but the file `IdentityIQ-Documenter-Config.xsl` can be used to configure which things should be documented and how detailed the documentation should be.
+
 ## File Collection
 
 There are two common ways to get the configuration files for documentation:
