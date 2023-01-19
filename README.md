@@ -32,7 +32,7 @@ In this scenario, only customized/updated files would be included. First of all,
 ./build.sh -Dtarget=production clean war
 ```
 
-After that command completes successfully, the configuration files will be located under `build/extract/WEB-INF/config/custom`. These files can be combined into a single file using the [SailPointXMLMerger][https://github.com/menno-pieters-sp/sailpoint-xml-merger] tool.
+After that command completes successfully, the configuration files will be located under `build/extract/WEB-INF/config/custom`. These files can be combined into a single file using the [SailPointXMLMerger](https://github.com/menno-pieters-sp/sailpoint-xml-merger) tool.
 
 Assuming that this tool is located under `/home/jdoe/lib` as `SailPointXMLMerger.jar` and output should be filed under `/home/jdoe/Documents`, the command could look like this:
 
