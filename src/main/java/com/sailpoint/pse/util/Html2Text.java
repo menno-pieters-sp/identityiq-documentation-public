@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.nnit.iamservices.novoaccess.applicationAgreement.util;
+package com.sailpoint.pse.util;
 
 import java.io.IOException;
 import java.io.Reader;

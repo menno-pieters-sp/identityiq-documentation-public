@@ -10,7 +10,7 @@
   <!-- The groupId, artifactId, version is sourced from when the project is instantiated.-->
   <groupId>sailpoint</groupId>
   <artifactId>identityiq-documentation-generator</artifactId>
-  <version>20230119.0.1</version>
+  <version>20230120.0.1</version>
 
   <!-- Set build properties here. For the most part, you should only need to set the version numbers
   for dependencies here. -->
@@ -24,34 +24,6 @@
   </properties>
 
   <dependencies>
-    <!--
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-api</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-core</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-1.2-api</artifactId>
-      <version>${log4j.version}</version>
-    <scope>test</scope>
-    </dependency>
-    <dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-jcl</artifactId>
-    <version>${log4j.version}</version>
-    </dependency>
-    <dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-to-slf4j</artifactId>
-    <version>${log4j.version}</version>
-    </dependency>
-    -->
     <!-- https://mvnrepository.com/artifact/com.cronutils/cron-utils -->
     <dependency>
       <groupId>com.cronutils</groupId>
