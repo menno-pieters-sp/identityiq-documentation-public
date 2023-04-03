@@ -95,6 +95,16 @@
                         </tr>
                     </xsl:if>
                     <!-- TODO: Add QuickLink Populations -->
+					<td>QuickLinkOptions</td>
+					<td>
+						<xsl:if test="QickLinkOptions">
+							<ul>
+								<xsl:for-each select="QuickLinkOptions">
+									<li><xsl:value-of select="DynamicScopeRef/Reference/@name"></li>
+								</xsl:for-each>
+							</ul>
+						</xsl:if>
+					</td>
                 </table>
             </xsl:for-each>
         </xsl:if>
