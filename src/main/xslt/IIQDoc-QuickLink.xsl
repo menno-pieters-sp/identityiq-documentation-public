@@ -100,6 +100,7 @@
 						<xsl:if test="QickLinkOptions">
 							<ul>
 								<xsl:for-each select="QuickLinkOptions">
+									<xsl:sort select="DynamicScopeRef/Reference/@name" />
 									<li><xsl:value-of select="DynamicScopeRef/Reference/@name"></li>
 								</xsl:for-each>
 							</ul>
