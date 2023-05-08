@@ -76,11 +76,21 @@ h7::before {
 
 h8 {
 	color: #0033a1;
+	counter-reset: h9counter;
 }
 h8::before {
 	counter-increment: h8counter;
 	content: counter(h1counter) "." counter(h2counter) "." counter(h3counter) "." counter(h4counter) "." counter(h5counter) "." counter(h6counter) "." counter(h7counter) "." counter(h8counter) ".\0000a0\0000a0";
 }
+
+h9 {
+	color: #0033a1;
+}
+h9::before {
+	counter-increment: h9counter;
+	content: counter(h1counter) "." counter(h2counter) "." counter(h3counter) "." counter(h4counter) "." counter(h5counter) "." counter(h6counter) "." counter(h7counter) "." counter(h8counter) "." counter(h9counter) ".\0000a0\0000a0";
+}
+
 
 div#mainBody {
 height: 100vh;
