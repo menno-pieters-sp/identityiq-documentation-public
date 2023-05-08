@@ -80,7 +80,25 @@
 				<tr>
 					<th class="rowHeader">Number of sequential task launcher tasks</th>
 					<td>
-						<xsl:value-of select="count(/sailpoint/TaskDefinition[not(@template='true') and @type='Identity'] | /sailpoint/ImportAction[@name='execute']/TaskDefinition[not(@template='true') and @type='Identity'])" />
+						<xsl:value-of select="count(/sailpoint/TaskDefinition[not(@template='true') and Parent/Reference/@name='Sequential Task Launcher'] | /sailpoint/ImportAction[@name='execute']/TaskDefinition[not(@template='true') and Parent/Reference/@name='Sequential Task Launcher'])" />
+					</td>
+				</tr>
+				<tr>
+					<th class="rowHeader">Sequential task launcher tasks</th>
+					<td>
+						<xsl:if test="count(/sailpoint/TaskDefinition[not(@template='true') and Parent/Reference/@name='Sequential Task Launcher'] | /sailpoint/ImportAction[@name='execute']/TaskDefinition[not(@template='true') and Parent/Reference/@name='Sequential Task Launcher']) &gt; 0">
+							<ul>
+								<xsl:for-each select="/sailpoint/TaskDefinition[not(@template='true') and Parent/Reference/@name='Sequential Task Launcher'] | /sailpoint/ImportAction[@name='execute']/TaskDefinition[not(@template='true') and Parent/Reference/@name='Sequential Task Launcher']">
+									<li>
+										<xsl:call-template name="taskDefinitionReferenceLink">
+											<xsl:with-param name="taskDefinitionName">
+												<xsl:value-of select="@name" />
+											</xsl:with-param>
+										</xsl:call-template>
+									</li>
+								</xsl:for-each>
+							</ul>
+						</xsl:if>
 					</td>
 				</tr>
 			</table>
