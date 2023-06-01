@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:iiqdoc="http://iiqdoc.config.data">
 	<xsl:output omit-xml-declaration="yes" indent="yes" method="html" />
 
 	<xsl:template name="populationReferenceLink">
 		<xsl:param name="populationName"/>
 		<xsl:param name="populationId"/>
 		<xsl:choose>
-			<xsl:when test="//GroupDefinition[@id=$populationId]">
+			<xsl:when test="//GroupDefinition[@id=$populationId] and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentPopulations']/@value='true'">
 				<a>
 					<xsl:attribute name="href">
 						<xsl:value-of select="concat('#Population - ', $populationId)"/>
@@ -21,7 +21,7 @@
 	</xsl:template>
 
 	<xsl:template name="processPopulations">
-		<xsl:if test="//GroupDefinition[not(Factory)]">
+		<xsl:if test="//GroupDefinition[not(Factory)] and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentPopulations']/@value='true'">
 			<a name="Heading-Populations"/>
 			<h1>Populations</h1>
 			<xsl:for-each select="//GroupDefinition[not(Factory)]">

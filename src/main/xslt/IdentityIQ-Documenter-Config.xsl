@@ -11,19 +11,24 @@
         <iiqdoc:setting key="documentManagedAttributes" value="false" />
         <iiqdoc:setting key="documentTasks" value="true" />
         <iiqdoc:setting key="documentRules" value="true" />
+        <iiqdoc:setting key="documentPolicies" value="true" />
         <iiqdoc:setting key="documentQuickLinks" value="true" />
         <iiqdoc:setting key="documentWorkflows" value="true" />
+        <iiqdoc:setting key="documentWorkgroups" value="true" />
+        <iiqdoc:setting key="documentGroupFactories" value="true" />
+        <iiqdoc:setting key="documentPopulations" value="true" />
         <iiqdoc:setting key="documentLifecycleEvents" value="true" />
         <iiqdoc:setting key="showExtendedAttributeCategory" value="true" />
 
 		<!-- Applications -->
+        <iiqdoc:setting key="applicationStatisticsOnly" value="false" />
         <iiqdoc:setting key="includeApplicationDetails" value="true" />
         <iiqdoc:setting key="includeApplicationSchemas" value="true" />
         <iiqdoc:setting key="includeApplicationConfigurationDetails.DelimitedFile" value="true" />
         <iiqdoc:setting key="includeApplicationConfigurationDetails.ActiveDirectory" value="true" />
         <iiqdoc:setting key="includeApplicationConfigurationDetails.LDAP" value="true" />
         <iiqdoc:setting key="includeApplicationConfigurationDetails.JDBC" value="true" />
-
+        
 		<!-- ManagedAttribute (Entitlements) -->
         <iiqdoc:setting key="showManagedAttributeType" value="false" />
         <iiqdoc:setting key="hideManagedAttributeExtendedAttribute">

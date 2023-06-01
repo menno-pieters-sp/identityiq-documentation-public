@@ -34,7 +34,7 @@
 	<xsl:template name="workgroupOrIdentityLink">
 		<xsl:param name="identityName"/>
 		<xsl:choose>
-			<xsl:when test="//Identity[@workgroup='true' and @name=$identityName]">
+			<xsl:when test="//Identity[@workgroup='true' and @name=$identityName] and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentWorkgroups']/@value='true'">
 				<a>
 					<xsl:attribute name="href">
 						<xsl:value-of select="concat('#Workgroup - ', $identityName)"/>
@@ -52,7 +52,7 @@
 	</xsl:template>
 
 	<xsl:template name="processWorkgroups">
-		<xsl:if test="/sailpoint/Identity[@workgroup='true']">
+		<xsl:if test="/sailpoint/Identity[@workgroup='true'] and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentWorkgroups']/@value='true'">
 			<a name="Heading-Workgroups"/>
 			<h1>Workgroups</h1>
 			<xsl:for-each select="/sailpoint/Identity[@workgroup='true']">

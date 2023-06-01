@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:iiqdoc="http://iiqdoc.config.data">
 	<xsl:output omit-xml-declaration="yes" indent="yes" method="html" />
 
 	<xsl:template name="groupFactoryReferenceLink">
 		<xsl:param name="groupFactoryName"/>
 		<xsl:param name="groupFactoryId"/>
 		<xsl:choose>
-			<xsl:when test="//GroupFactory[@name=$groupFactoryName]">
+			<xsl:when test="//GroupFactory[@name=$groupFactoryName] and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentGroupFactories']/@value='true'">
 				<a>
 					<xsl:attribute name="href">
 						<xsl:value-of select="concat('#GroupFactory - ', $groupFactoryName)"/>
@@ -14,7 +14,7 @@
 					<xsl:value-of select="//GroupFactory[@name=$groupFactoryName]/@name"/>
 				</a>
 			</xsl:when>
-			<xsl:when test="//GroupFactory[@id=$groupFactoryId]">
+			<xsl:when test="//GroupFactory[@id=$groupFactoryId] and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentGroupFactories']/@value='true'">
 				<a>
 					<xsl:attribute name="href">
 						<xsl:value-of select="concat('#GroupFactory - ', //GroupFactory[@id=$groupFactoryId]/@name)"/>
@@ -29,7 +29,7 @@
 	</xsl:template>
 
 	<xsl:template name="processGroupFactories">
-		<xsl:if test="/sailpoint/GroupFactory">
+		<xsl:if test="/sailpoint/GroupFactory and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentGroupFactories']/@value='true'">
 			<a name="Heading-GroupFactory"/>
 			<h1>Group Factories</h1>
 			<xsl:for-each select="/sailpoint/GroupFactory">

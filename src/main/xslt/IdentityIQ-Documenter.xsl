@@ -104,17 +104,19 @@ function unfoldSection(name) {
 					</li>
 					<ol id="submenu-Application" style="display: none;">
 						<li><a href="#Application-Statistics">Application Statistics</a></li>
-						<xsl:for-each select="/sailpoint/Application | /sailpoint/ImportAction[@name='execute']/Application">
-							<xsl:sort select="@name"/>
-							<li>
-								<a>
-									<xsl:attribute name="href">
-										<xsl:value-of select="concat('#Application - ', @name)"/>
-									</xsl:attribute>
-									<xsl:value-of select="@name"/>
-								</a>
-							</li>
-						</xsl:for-each>
+                        <xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='applicationStatisticsOnly']/@value!='true'">
+    						<xsl:for-each select="/sailpoint/Application | /sailpoint/ImportAction[@name='execute']/Application">
+    							<xsl:sort select="@name"/>
+    							<li>
+    								<a>
+    									<xsl:attribute name="href">
+    										<xsl:value-of select="concat('#Application - ', @name)"/>
+    									</xsl:attribute>
+    									<xsl:value-of select="@name"/>
+    								</a>
+    							</li>
+    						</xsl:for-each>
+                        </xsl:if>
 					</ol>
 				</xsl:if>
 
@@ -217,7 +219,7 @@ function unfoldSection(name) {
 				</xsl:if>
 
 				<!-- Workgroups -->
-				<xsl:if test="/sailpoint/Identity[@workgroup='true']">
+				<xsl:if test="/sailpoint/Identity[@workgroup='true'] and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentWorkgroups']/@value='true'">
 					<li>
 						<a href="#Heading-Workgroups">Workgroups</a><xsl:text> </xsl:text><span onclick="toggleSection('Workgroups')" id="triangle-Workgroups" class="triangle-icon">&#9654;</span>
 					</li>
@@ -237,7 +239,7 @@ function unfoldSection(name) {
 				</xsl:if>
 
 				<!-- Populations -->
-				<xsl:if test="/sailpoint/GroupDefinition[not(Factory)]">
+				<xsl:if test="/sailpoint/GroupDefinition[not(Factory)] and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentPopulations']/@value='true'">
 					<li>
 						<a href="#Heading-Populations">Populations</a><xsl:text> </xsl:text><span onclick="toggleSection('Populations')" id="triangle-Populations" class="triangle-icon">&#9654;</span>
 					</li>
@@ -256,7 +258,7 @@ function unfoldSection(name) {
 				</xsl:if>
 
 				<!-- GroupFactories -->
-				<xsl:if test="/sailpoint/GroupFactory">
+				<xsl:if test="/sailpoint/GroupFactory and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentGroupFactories']/@value='true'">
 					<li>
 						<a href="#Heading-GroupFactory">Group Factories</a><xsl:text> </xsl:text><span onclick="toggleSection('GroupFactory')" id="triangle-GroupFactory" class="triangle-icon">&#9654;</span>
 					</li>
@@ -321,7 +323,7 @@ function unfoldSection(name) {
 				<!-- TODO -->
 
 				<!-- Policies -->
-				<xsl:if test="/sailpoint/Policy[not(@template='true')]">
+				<xsl:if test="/sailpoint/Policy[not(@template='true')] and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentPolicies']/@value='true'">
 					<li>
 						<a href="#Heading-Policies">Policies</a><xsl:text> </xsl:text><span onclick="toggleSection('Policies')" id="triangle-Policies" class="triangle-icon">&#9654;</span>
 					</li>

@@ -5,7 +5,7 @@
 	<xsl:template name="policyReferenceLink">
 		<xsl:param name="policyName"/>
 		<xsl:choose>
-			<xsl:when test="//Policy[not(@template='true') and @name=$policyName]">
+			<xsl:when test="//Policy[not(@template='true') and @name=$policyName] and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentPolicies']/@value='true'">
 				<a>
 					<xsl:attribute name="href">
 						<xsl:value-of select="concat('#Policy - ', @policyName)"/>
@@ -254,7 +254,7 @@
 	</xsl:template>
 
 	<xsl:template name="processPolicies">
-		<xsl:if test="/sailpoint/Policy[not(@template='true')]">
+		<xsl:if test="/sailpoint/Policy[not(@template='true')] and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentPolicies']/@value='true'">
 			<a name="Heading-Policies"/>
 			<h1>Policies</h1>
 
