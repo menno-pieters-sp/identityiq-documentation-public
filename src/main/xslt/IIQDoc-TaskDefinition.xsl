@@ -281,7 +281,40 @@
 								</td>
 							</tr>
 						</xsl:if>
-					</xsl:if>
+                        <!-- preRefreshRule -->
+                        <xsl:if test="Attributes/Map/entry[@key='preRefreshRule']">
+                            <tr>
+                                <th class="rowHeader">Pre-Refresh Rule</th>
+                                <td>
+                                    <xsl:call-template name="ruleReferenceLink">
+                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='preRefreshRule']/@value" />
+                                    </xsl:call-template>
+                                </td>
+                            </tr>
+                        </xsl:if>
+                        <!-- refreshRule -->
+                        <xsl:if test="Attributes/Map/entry[@key='refreshRule']">
+                            <tr>
+                                <th class="rowHeader">Refresh Rule</th>
+                                <td>
+                                    <xsl:call-template name="ruleReferenceLink">
+                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='refreshRule']/@value" />
+                                    </xsl:call-template>
+                                </td>
+                            </tr>
+                        </xsl:if>
+                        <!-- refreshWorkflow -->
+                        <xsl:if test="Attributes/Map/entry[@key='refreshWorkflow']">
+                            <tr>
+                                <th class="rowHeader">Refresh Workflow</th>
+                                <td>
+                                    <xsl:call-template name="workflowReferenceLink">
+                                        <xsl:with-param name="workflowName" select="Attributes/Map/entry[@key='refreshWorkflow']/@value" />
+                                    </xsl:call-template>
+                                </td>
+                            </tr>
+                        </xsl:if>
+                    </xsl:if>
 					<xsl:if test="Attributes/Map/entry[@key='applications']">
 						<tr>
 							<th class="rowHeader">Application</th>

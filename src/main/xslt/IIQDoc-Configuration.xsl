@@ -19,7 +19,7 @@
                         <xsl:call-template name="getConfigValue">
                             <xsl:with-param name="name" select="'defaultLanguage'" />
                         </xsl:call-template>
-                    </td>                    
+                    </td>
                 </tr>
                 <tr>
                     <td>Supported Languages</td>
@@ -27,7 +27,7 @@
                         <xsl:call-template name="getConfigStringBulletList">
                             <xsl:with-param name="name" select="'supportedLanguages'" />
                         </xsl:call-template>
-                    </td>                    
+                    </td>
                 </tr>
                 <tr>
                     <td>LCM Enabled</td>
@@ -35,7 +35,7 @@
                         <xsl:call-template name="getConfigBooleanIcon">
                             <xsl:with-param name="name" select="'lcmEnabled'" />
                         </xsl:call-template>
-                    </td>                    
+                    </td>
                 </tr>
                 <tr>
                     <td>Allow IdentityIQ in an iFrame</td>
@@ -43,7 +43,7 @@
                         <xsl:call-template name="getConfigBooleanIcon">
                             <xsl:with-param name="name" select="'allowiFrame'" />
                         </xsl:call-template>
-                    </td>                    
+                    </td>
                 </tr>
                 <tr>
                     <td>Asynchronous Cache Refresh</td>
@@ -51,7 +51,7 @@
                         <xsl:call-template name="getConfigBooleanIcon">
                             <xsl:with-param name="name" select="'asyncCacheRefresh'" />
                         </xsl:call-template>
-                    </td>                    
+                    </td>
                 </tr>
             </table>
             <h3>Mail Settings</h3>
@@ -246,6 +246,201 @@
                     <td>
                         <xsl:call-template name="getConfigNumber">
                             <xsl:with-param name="name" select="'provisioningTransactionLogPruneAge'" />
+                        </xsl:call-template>
+                    </td>
+                </tr>
+            </table>
+            <h2>Lifecycle Manager Configuration</h2>
+            <h3>Business Processes</h3>
+            <table>
+                <tr>
+                    <th>Action</th>
+                    <th>Business Process</th>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Request Access</b>
+                    </td>
+                    <td>
+                        <xsl:call-template name="workflowReferenceLink">
+                            <xsl:with-param name="workflowName">
+                                <xsl:value-of select="/sailpoint/ImportAction[@name='merge' or @name='execute']/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='workflowLCMAccessRequest']/@value | /sailpoint/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='workflowLCMAccessRequest']/@value" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Manage Accounts</b>
+                    </td>
+                    <td>
+                        <xsl:call-template name="workflowReferenceLink">
+                            <xsl:with-param name="workflowName">
+                                <xsl:value-of select="/sailpoint/ImportAction[@name='merge' or @name='execute']/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='workflowLCMAccountsRequest']/@value | /sailpoint/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='workflowLCMAccountsRequest']/@value" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Unlock User Account</b>
+                    </td>
+                    <td>
+                        <xsl:call-template name="workflowReferenceLink">
+                            <xsl:with-param name="workflowName">
+                                <xsl:value-of select="/sailpoint/ImportAction[@name='merge' or @name='execute']/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='workflowLCMUnlockAccount']/@value | /sailpoint/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='workflowLCMUnlockAccount']/@value" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Manage Passwords</b>
+                    </td>
+                    <td>
+                        <xsl:call-template name="workflowReferenceLink">
+                            <xsl:with-param name="workflowName">
+                                <xsl:value-of select="/sailpoint/ImportAction[@name='merge' or @name='execute']/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='workflowLCMPasswordsRequest']/@value | /sailpoint/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='workflowLCMPasswordsRequest']/@value" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Edit Identity</b>
+                    </td>
+                    <td>
+                        <xsl:call-template name="workflowReferenceLink">
+                            <xsl:with-param name="workflowName">
+                                <xsl:value-of select="/sailpoint/ImportAction[@name='merge' or @name='execute']/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='workflowLCMIdentityEditRequest']/@value | /sailpoint/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='workflowLCMIdentityEditRequest']/@value" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Create Identity</b>
+                    </td>
+                    <td>
+                        <xsl:call-template name="workflowReferenceLink">
+                            <xsl:with-param name="workflowName">
+                                <xsl:value-of select="/sailpoint/ImportAction[@name='merge' or @name='execute']/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='workflowLCMIdentityCreateRequest']/@value | /sailpoint/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='workflowLCMIdentityCreateRequest']/@value" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Self-service Registration</b>
+                    </td>
+                    <td>
+                        <xsl:call-template name="workflowReferenceLink">
+                            <xsl:with-param name="workflowName">
+                                <xsl:value-of select="/sailpoint/ImportAction[@name='merge' or @name='execute']/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='workflowLCMSelfServiceRegistrationRequest']/@value | /sailpoint/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='workflowLCMSelfServiceRegistrationRequest']/@value" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Batch Request Access</b>
+                    </td>
+                    <td>
+                        <xsl:call-template name="workflowReferenceLink">
+                            <xsl:with-param name="workflowName">
+                                <xsl:value-of select="/sailpoint/ImportAction[@name='merge' or @name='execute']/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='batchRequestAccountsRequest']/@value | /sailpoint/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='batchRequestAccessRequest']/@value" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Batch Manage Accounts</b>
+                    </td>
+                    <td>
+                        <xsl:call-template name="workflowReferenceLink">
+                            <xsl:with-param name="workflowName">
+                                <xsl:value-of select="/sailpoint/ImportAction[@name='merge' or @name='execute']/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='batchRequestAccountsRequest']/@value | /sailpoint/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='batchRequestAccessRequest']/@value" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Batch Manage Passwords</b>
+                    </td>
+                    <td>
+                        <xsl:call-template name="workflowReferenceLink">
+                            <xsl:with-param name="workflowName">
+                                <xsl:value-of select="/sailpoint/ImportAction[@name='merge' or @name='execute']/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='batchRequestPasswordsRequest']/@value | /sailpoint/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='batchRequestPasswordsRequest']/@value" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Batch Edit Identity</b>
+                    </td>
+                    <td>
+                        <xsl:call-template name="workflowReferenceLink">
+                            <xsl:with-param name="workflowName">
+                                <xsl:value-of select="/sailpoint/ImportAction[@name='merge' or @name='execute']/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='batchRequestIdentityEditRequest']/@value | /sailpoint/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='batchRequestIdentityEditRequest']/@value" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Batch Create Identity</b>
+                    </td>
+                    <td>
+                        <xsl:call-template name="workflowReferenceLink">
+                            <xsl:with-param name="workflowName">
+                                <xsl:value-of select="/sailpoint/ImportAction[@name='merge' or @name='execute']/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='batchRequestIdentityCreateRequest']/@value | /sailpoint/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='batchRequestIdentityCreateRequest']/@value" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </td>
+                </tr>
+            </table>
+            <h3>Identity Provisioning Policies</h3>
+            <table>
+                <tr>
+                    <th>Type</th>
+                    <th>Provisioning Form</th>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Create Identity</b>
+                    </td>
+                    <td>
+                        <xsl:call-template name="formReferenceLink">
+                            <xsl:with-param name="formName">
+                                <xsl:value-of select="/sailpoint/ImportAction[@name='merge' or @name='execute']/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='createIdentityForm']/@value | /sailpoint/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='createIdentityForm']/@value" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Update Identity</b>
+                    </td>
+                    <td>
+                        <xsl:call-template name="formReferenceLink">
+                            <xsl:with-param name="formName">
+                                <xsl:value-of select="/sailpoint/ImportAction[@name='merge' or @name='execute']/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='updateIdentityForm']/@value | /sailpoint/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='updateIdentityForm']/@value" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Self-service Registration</b>
+                    </td>
+                    <td>
+                        <xsl:call-template name="formReferenceLink">
+                            <xsl:with-param name="formName">
+                                <xsl:value-of select="/sailpoint/ImportAction[@name='merge' or @name='execute']/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='registerForm']/@value | /sailpoint/Configuration[@name='SystemConfiguration']/Attributes/Map/entry[@key='registerForm']/@value" />
+                            </xsl:with-param>
                         </xsl:call-template>
                     </td>
                 </tr>

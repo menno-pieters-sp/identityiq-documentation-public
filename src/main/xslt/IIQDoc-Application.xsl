@@ -4,7 +4,7 @@
     <xsl:template name="applicationReferenceLink">
         <xsl:param name="applicationName" />
         <xsl:choose>
-            <xsl:when test="//Application[@name=$applicationName]">
+            <xsl:when test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='applicationStatisticsOnly']/@value!='true' and //Application[@name=$applicationName]">
                 <a>
                     <xsl:attribute name="href">
 						<xsl:value-of select="concat('#Application - ', $applicationName)" />
@@ -654,12 +654,12 @@
                                         </td>
                                     </tr>
                                     <xsl:choose>
-                                        <xsl:when test="Attributes/Map/entry[@key='provisionRule']/value = 'operationRule'">
+                                        <xsl:when test="Attributes/Map/entry[@key='provisionRule']/@value = 'operationRule'">
                                             <tr>
                                                 <td class="property">JDBC Create Provisioning Rule</td>
                                                 <td class="value">
                                                     <xsl:call-template name="ruleReferenceLink">
-                                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='jdbcCreateProvisioningRule']/value" />
+                                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='jdbcCreateProvisioningRule']/@value" />
                                                     </xsl:call-template>
                                                 </td>
                                             </tr>
@@ -667,7 +667,7 @@
                                                 <td class="property">JDBC Delete Provisioning Rule</td>
                                                 <td class="value">
                                                     <xsl:call-template name="ruleReferenceLink">
-                                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='jdbcDeleteProvisioningRule']/value" />
+                                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='jdbcDeleteProvisioningRule']/@value" />
                                                     </xsl:call-template>
                                                 </td>
                                             </tr>
@@ -675,7 +675,7 @@
                                                 <td class="property">JDBC Modify Provisioning Rule</td>
                                                 <td class="value">
                                                     <xsl:call-template name="ruleReferenceLink">
-                                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='jdbcModifyProvisioningRule']/value" />
+                                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='jdbcModifyProvisioningRule']/@value" />
                                                     </xsl:call-template>
                                                 </td>
                                             </tr>
@@ -683,7 +683,7 @@
                                                 <td class="property">JDBC Enable Provisioning Rule</td>
                                                 <td class="value">
                                                     <xsl:call-template name="ruleReferenceLink">
-                                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='jdbcEnableProvisioningRule']/value" />
+                                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='jdbcEnableProvisioningRule']/@value" />
                                                     </xsl:call-template>
                                                 </td>
                                             </tr>
@@ -691,7 +691,7 @@
                                                 <td class="property">JDBC Disable Provisioning Rule</td>
                                                 <td class="value">
                                                     <xsl:call-template name="ruleReferenceLink">
-                                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='jdbcDisableProvisioningRule']/value" />
+                                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='jdbcDisableProvisioningRule']/@value" />
                                                     </xsl:call-template>
                                                 </td>
                                             </tr>
@@ -699,7 +699,7 @@
                                                 <td class="property">JDBC Unlock Provisioning Rule</td>
                                                 <td class="value">
                                                     <xsl:call-template name="ruleReferenceLink">
-                                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='jdbcUnlockProvisioningRule']/value" />
+                                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='jdbcUnlockProvisioningRule']/@value" />
                                                     </xsl:call-template>
                                                 </td>
                                             </tr>
@@ -709,7 +709,7 @@
                                                 <td class="property">JDBC Provisioning Rule</td>
                                                 <td class="value">
                                                     <xsl:call-template name="ruleReferenceLink">
-                                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='jdbcProvisionRule']/value" />
+                                                        <xsl:with-param name="ruleName" select="Attributes/Map/entry[@key='jdbcProvisionRule']/@value" />
                                                     </xsl:call-template>
                                                 </td>
                                             </tr>

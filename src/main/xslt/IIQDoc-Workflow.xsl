@@ -5,6 +5,9 @@
     <xsl:variable name="boxHeight" select="48" />
     <xsl:variable name="lineColor" select="'#444444'" />
     <xsl:variable name="lineWidth" select="1" />
+    <!-- 
+        Create a link to a workflow object
+    -->
     <xsl:template name="workflowReferenceLink">
         <xsl:param name="workflowName" />
         <xsl:choose>
@@ -21,6 +24,9 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+    <!--
+        Render a workflow variable 
+    -->
     <xsl:template name="processWorkflowVariable" match="//Workflow/Variable">
         <xsl:param name="workflowName" />
         <h4>
@@ -452,6 +458,11 @@
         <h4>
             <xsl:value-of select="concat('Step: ', @name)" />
         </h4>
+        <p style="font-size: 8px;"><xsl:text>(Return to </xsl:text><a>
+            <xsl:attribute name="href">
+                <xsl:value-of select="concat('#Workflow - ', $workflowName)" />
+            </xsl:attribute>        
+            <xsl:text>Workflow</xsl:text></a><xsl:text>)</xsl:text></p>
         <table>
             <tr>
                 <th class="rowHeader">Action</th>
@@ -1217,6 +1228,21 @@
                             </xsl:call-template>
                         </td>
                     </tr>
+                    <tr>
+                        <th class="rowHeader">Called From Workflows</th>
+                        <td>
+                            <ul>
+                                <xsl:for-each select="//Workflow[Step/WorkflowRef/Reference/@name=$workflowName]">
+                                    <li>
+                                        <xsl:call-template name="workflowReferenceLink">
+                                            <xsl:with-param name="workflowName" select="@name" />
+                                        </xsl:call-template>
+                                    </li>
+                                </xsl:for-each>
+                            </ul>
+                        </td>
+                    </tr>
+                    
                 </table>
                 <xsl:if test="Description">
                     <h3>Description</h3>
@@ -1226,6 +1252,19 @@
                 </xsl:if>
 				<!-- Draw SVG -->
                 <xsl:call-template name="drawWorkflowSVG" />
+                <p>Steps:</p>
+                <ul>
+                    <xsl:for-each select="Step">
+                        <li>
+                            <a>
+                                <xsl:attribute name="href">
+                                    <xsl:value-of select="concat('#Workflow - ', $workflowName, ' - Step - ', @name)" />
+                                </xsl:attribute>
+                                <xsl:value-of select="@name"/>
+                            </a>
+                        </li>
+                    </xsl:for-each>
+                </ul>
                 <xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='includeWorkflowDetails']/@value='true'">
 					<!-- libraries -->
                     <xsl:if test="RuleLibraries/Reference">
