@@ -305,6 +305,11 @@ function unfoldSection(name) {
                         <li>
                             <a href="#TaskDefinition -- Summary">Summary</a>
                         </li>
+                        <xsl:if test="/sailpoint/TaskSchedule[CronExpressions]">
+                            <li>
+                                <a href="#TaskDefinition -- SummaryTaskSchedules">Task Schedules</a>
+                            </li>
+                        </xsl:if>                        
 						<xsl:for-each select="/sailpoint/TaskDefinition[not(@template='true' or @type='GridReport' or @type='Report' or @type='LiveReport' or @type='Certification' or @type='RoleMining' or @executor='sailpoint.task.RoleMiningTask')] | /sailpoint/ImportAction[@name='execute']/TaskDefinition[not(@template='true' or @type='GridReport' or @type='Report' or @type='LiveReport' or @type='Certification' or @type='RoleMining' or @executor='sailpoint.task.RoleMiningTask')]">
 							<xsl:sort select="@name"/>
 							<li>

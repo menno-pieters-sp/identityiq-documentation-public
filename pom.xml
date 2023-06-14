@@ -10,7 +10,7 @@
   <!-- The groupId, artifactId, version is sourced from when the project is instantiated.-->
   <groupId>sailpoint</groupId>
   <artifactId>identityiq-documentation-generator</artifactId>
-  <version>20230120.0.1</version>
+  <version>20230614.0.1</version>
 
   <!-- Set build properties here. For the most part, you should only need to set the version numbers
   for dependencies here. -->

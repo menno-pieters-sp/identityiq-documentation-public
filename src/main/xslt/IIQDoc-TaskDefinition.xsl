@@ -103,6 +103,48 @@
 				</tr>
 			</table>
 
+			<xsl:if test="/sailpoint/TaskSchedule[CronExpressions]">
+                <a name="TaskDefinition -- SummaryTaskSchedules" />
+                <h2>Task Schedules</h2>
+                <table class="mapTable">
+                    <tr>
+                        <th>Schedule Name</th>
+                        <th>Task Name</th>
+                        <th>Schedule</th>
+                        <th>Average Runtime</th>
+                    </tr>
+                    <xsl:for-each select="/sailpoint/TaskSchedule[CronExpressions]">
+                        <xsl:variable name="executorName" select="Arguments/Map/entry[@key='executor']/@value" />
+                        <tr>
+                            <td><xsl:value-of select="@name"/></td>
+                            <td>
+                                <xsl:call-template name="taskDefinitionReferenceLink">
+                                    <xsl:with-param name="taskDefinitionName">
+                                        <xsl:value-of select="$executorName"/>
+                                    </xsl:with-param>
+                                </xsl:call-template>
+                            </td>
+                            <td>
+                                <xsl:for-each select="CronExpressions/String">
+                                    <xsl:call-template name="describeCronExpression">
+                                        <xsl:with-param name="cronExpression" select="./text()" />
+                                    </xsl:call-template>
+                                </xsl:for-each>
+                            </td>
+                            <td>                            
+                                <xsl:if test="//TaskDefinition[@name=$executorName]/Attributes/Map/entry[@key='TaskDefinition.runLengthAverage']">
+                                    <xsl:call-template name="formatDurationSeconds">
+                                        <xsl:with-param name="s">
+                                            <xsl:value-of select="//TaskDefinition[@name=$executorName]/Attributes/Map/entry[@key='TaskDefinition.runLengthAverage']/@value"/>
+                                        </xsl:with-param>
+                                    </xsl:call-template>
+                                </xsl:if>
+                            </td>
+                        </tr>
+                    </xsl:for-each>
+                </table>
+			</xsl:if>
+
 			<xsl:for-each select="/sailpoint/TaskDefinition[not(@template='true' or @type='GridReport' or @type='Report' or @type='LiveReport' or @type='Certification' or @type='RoleMining' or @executor='sailpoint.task.RoleMiningTask')] | /sailpoint/ImportAction[@name='execute']/TaskDefinition[not(@template='true' or @type='GridReport' or @type='Report' or @type='LiveReport' or @type='Certification' or @type='RoleMining' or @executor='sailpoint.task.RoleMiningTask')]">
 				<xsl:sort select="@name" />
 				<xsl:variable name="taskDefinitionName">
@@ -181,6 +223,18 @@
 							</td>
 						</tr>
 					</xsl:if>
+                    <xsl:if test="//TaskDefinition[@name=$executorName]/Attributes/Map/entry[@key='TaskDefinition.runLengthAverage']">
+                        <tr>
+                            <th class="rowHeader">Average Duration</th>
+                            <td>
+                                <xsl:call-template name="formatDurationSeconds">
+                                    <xsl:with-param name="s">
+                                        <xsl:value-of select="//TaskDefinition[@name=$executorName]/Attributes/Map/entry[@key='TaskDefinition.runLengthAverage']/@value" />
+                                    </xsl:with-param>
+                                </xsl:call-template>
+                            </td>
+                        </tr>
+                    </xsl:if>                    
 					<xsl:if test="Attributes/Map/entry[@key='TaskSchedule.host']/@value">
 						<tr>
 							<th class="rowHeader">Host</th>

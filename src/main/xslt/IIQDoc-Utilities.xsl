@@ -482,6 +482,10 @@
         <xsl:variable name="formatter" select="java:java.text.SimpleDateFormat.new($format)" />
         <xsl:value-of select="java:format($formatter, $date)" />
     </xsl:template>
+    <xsl:template name="formatDurationSeconds">
+        <xsl:param name="s"/>
+        <xsl:value-of select="java:com.sailpoint.pse.util.TimeTool.formatDurationSeconds($s)" />
+    </xsl:template>
     <xsl:template name="describeCronExpression">
         <xsl:param name="cronExpression" />
         <xsl:variable name="cronTypeQuartz" select="'QUARTZ'" />
