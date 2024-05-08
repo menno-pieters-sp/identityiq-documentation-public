@@ -24,7 +24,7 @@ Files can be exported from the IdentityIQ console by listing the object types to
 
 This will produce a single file with all objects of the specified object classes. It will also include any out-of-the-box objects.
 
-### Collect File from SSB/SSG build
+### Collect File from SSB/SSD build
 
 In this scenario, only customized/updated files would be included. First of all, the SSB/SSD command to build the configuration and sources would have to be issued to generate all the configuration files with all parameterized settings filles in. For example:
 
