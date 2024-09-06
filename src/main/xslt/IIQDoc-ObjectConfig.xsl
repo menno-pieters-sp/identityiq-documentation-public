@@ -305,6 +305,119 @@
 						</xsl:if>
 					</xsl:for-each>
 				</table>
+
+				<xsl:if test="//FullTextIndex[@name='BundleManagedAttribute'] and (@name='Bundle' or @name='ManagedAttribute') and ObjectAttribute[@extendedNumber or @namedColumn='true']">
+				    <h4>Searchable Extended Attributes in FullTextIndex</h4>
+					<p>If any of these attributes are used in a Request Object Selector Rule for a QuickLink Population, they must be present in the FullTextIndex, too.</p>
+					<table class="objectAttributeTable">
+						<tr>
+							<th>Attribute</th>
+							<th>Display Name</th>
+							<th>Type</th>
+							<th>Analyzed</th>
+							<th>Indexed</th>
+							<th>Stored</th>
+						</tr>
+						<xsl:for-each select="ObjectAttribute[extendedNumber or @namedColumn='true']">
+							<xsl:sort select="name"/>
+							<xsl:variable name="attributeName" select="@name"/>
+							<xsl:choose>
+								<xsl:when test="not(//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName])">
+									<tr>
+										<td><xsl:value-of select="@name"/></td>
+										<td><xsl:call-template name="localize"><xsl:with-param name="key" select="@displayName"/></xsl:call-template></td>
+										<td><xsl:value-of select="@type"/></td>
+										<td colspan="3"><xsl:text>&#9888; Not present in FullTextIndex</xsl:text></td>
+									</tr>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:choose>
+										<xsl:when test="@type='sailpoint.object.Identity'">
+											<tr>
+												<td><xsl:value-of select="concat(@name, '.name')"/></td>
+												<td rowspan="2"><xsl:call-template name="localize"><xsl:with-param name="key" select="@displayName"/></xsl:call-template></td>
+												<td rowspan="2"><xsl:value-of select="@type"/></td>
+												<td>
+													<xsl:call-template name="parseTextToBooleanIcon">
+														<xsl:with-param name="boolVal" select="//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName]/@analyzed"/>
+													</xsl:call-template>
+													<xsl:if test="not(//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName]/@analyzed = 'true')">
+														<xsl:text>&#9888;</xsl:text>
+													</xsl:if>
+												</td>
+												<td>
+													<xsl:call-template name="parseTextToBooleanIcon">
+														<xsl:with-param name="boolVal" select="//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName]/@indexed"/>
+													</xsl:call-template>
+													<xsl:if test="not(//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName]/@indexed = 'true')">
+														<xsl:text>&#9888;</xsl:text>
+													</xsl:if>
+												</td>
+												<td>
+													<xsl:call-template name="parseTextToBooleanIcon">
+														<xsl:with-param name="boolVal" select="//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName]/@stored"/>
+													</xsl:call-template>
+												</td>
+											</tr>
+											<tr>
+												<td><xsl:value-of select="concat(@name, '.id')"/></td>
+												<td>
+													<xsl:call-template name="parseTextToBooleanIcon">
+														<xsl:with-param name="boolVal" select="//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName]/@analyzed"/>
+													</xsl:call-template>
+													<xsl:if test="not(//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName]/@analyzed = 'true')">
+														<xsl:text>&#9888;</xsl:text>
+													</xsl:if>
+												</td>
+												<td>
+													<xsl:call-template name="parseTextToBooleanIcon">
+														<xsl:with-param name="boolVal" select="//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName]/@indexed"/>
+													</xsl:call-template>
+													<xsl:if test="not(//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName]/@indexed = 'true')">
+														<xsl:text>&#9888;</xsl:text>
+													</xsl:if>
+												</td>
+												<td>
+													<xsl:call-template name="parseTextToBooleanIcon">
+														<xsl:with-param name="boolVal" select="//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName]/@stored"/>
+													</xsl:call-template>
+												</td>
+											</tr>
+										</xsl:when>
+										<xsl:otherwise>
+											<tr>
+												<td><xsl:value-of select="@name"/></td>
+												<td><xsl:call-template name="localize"><xsl:with-param name="key" select="@displayName"/></xsl:call-template></td>
+												<td><xsl:value-of select="@type"/></td>
+												<td>
+													<xsl:call-template name="parseTextToBooleanIcon">
+														<xsl:with-param name="boolVal" select="//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName]/@analyzed"/>
+													</xsl:call-template>
+													<xsl:if test="@type = 'string' and not(//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName]/@analyzed = 'true')">
+														<xsl:text>&#9888;</xsl:text>
+													</xsl:if>
+												</td>
+												<td>
+													<xsl:call-template name="parseTextToBooleanIcon">
+														<xsl:with-param name="boolVal" select="//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName]/@indexed"/>
+													</xsl:call-template>
+													<xsl:if test="not(//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName]/@indexed = 'true')">
+														<xsl:text>&#9888;</xsl:text>
+													</xsl:if>
+												</td>
+												<td>
+													<xsl:call-template name="parseTextToBooleanIcon">
+														<xsl:with-param name="boolVal" select="//FullTextIndex[@name='BundleManagedAttribute']/Attributes/Map/entry[@key='fields']/value/List/FullTextField[@name=$attributeName]/@stored"/>
+													</xsl:call-template>
+												</td>
+											</tr>
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:for-each>
+					</table>
+				</xsl:if>
 				<hr/>
 			</xsl:for-each>
 		</xsl:if>
