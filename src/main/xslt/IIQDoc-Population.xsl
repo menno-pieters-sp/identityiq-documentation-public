@@ -25,6 +25,7 @@
 			<a name="Heading-Populations"/>
 			<h1>Populations</h1>
 			<xsl:for-each select="//GroupDefinition[not(Factory)]">
+				<xsl:variable name="populationName" select="@name"/>
 				<a>
 					<xsl:attribute name="name">
 						<xsl:value-of select="concat('Population - ', @id)" />
@@ -70,6 +71,63 @@
 									<xsl:call-template name="processFilter"/>
 								</xsl:if>
 							</xsl:for-each>
+						</td>
+					</tr>
+					<tr>
+						<th>Detected Usage</th>
+						<td>
+							<ul>
+								<!-- Bundle - Selector - IdentitySelector - PopulationRef - Reference - @name (Roles) -->
+								<xsl:for-each select="//Bundle[Selector/IdentitySelector/PopulationRef/Reference[@name=$populationName]]">
+									<li>
+										<xsl:text>Role: </xsl:text>
+										<xsl:call-template name="roleReferenceLink">
+											<xsl:with-param name="roleName" select="@name"/>
+										</xsl:call-template>
+									</li>
+								</xsl:for-each>
+								<!-- DynamicScope - Selector - IdentitySelector - PopulationRef - Reference - @name (QuickLink Population)-->
+								<xsl:for-each select="//DynamicScope[Selector/IdentitySelector/PopulationRef/Reference[@name=$populationName]]">
+									<li>
+										<xsl:text>QuickLink Population: </xsl:text>
+										<xsl:value-of select="@name"/>
+									</li>
+								</xsl:for-each>
+								<!-- IdentityTrigger - Selector - IdentitySelector - PopulationRef - Reference - @name (Certification Event: handler="sailpoint.api.CertificationTriggerHandler")-->
+								<xsl:for-each select="//IdentityTrigger[@handler='sailpoint.api.CertificationTriggerHandler' and Selector/IdentitySelector/PopulationRef/Reference[@name=$populationName]]">
+									<li>
+										<xsl:text>Certification Event: </xsl:text>
+										<xsl:value-of select="concat(@name, ' (', @type, ')')"/>
+									</li>
+								</xsl:for-each>
+								<!-- IdentityTrigger - Selector - IdentitySelector - PopulationRef - Reference - @name (Lifecycle Event: handler="sailpoint.api.WorkflowTriggerHandler") -->
+								<xsl:for-each select="//IdentityTrigger[@handler='sailpoint.api.WorkflowTriggerHandler' and Selector/IdentitySelector/PopulationRef/Reference[@name=$populationName]]">
+									<li>
+										<xsl:text>Lifecycle Event: </xsl:text>
+										<xsl:value-of select="concat(@name, ' (', @type, ')')"/>
+									</li>
+								</xsl:for-each>
+								<!-- Application - PasswordPolicies - PasswordPolicyHolder - Selector - IdentitySelector - PopulationRef - Reference - @name (Application password policies) -->
+								<xsl:for-each select="//Application/PasswordPolicies/PasswordPolicyHolder[Selector/IdentitySelector/PopulationRef/Reference[@name=$populationName]]">
+									<li>
+										<xsl:variable name="applicationName" select="../../@name"/>
+										<xsl:variable name="policyName" select="PolicyRef/Reference/@name"/>
+										<xsl:text>Password Policy: </xsl:text>
+										<xsl:value-of select="$policyName" />
+										<xsl:text> on application </xsl:text>
+										<xsl:call-template name="applicationReferenceLink">
+											<xsl:with-param name="applicationName" select="$applicationName"/>
+										</xsl:call-template>
+									</li>
+								</xsl:for-each>
+								<!-- Widget - Selector - IdentitySelector - PopulationRef - Reference - @name (Dashboard Widget) -->
+								<xsl:for-each select="//Widget[Selector/IdentitySelector/PopulationRef/Reference[@name=$populationName]]">
+									<li>
+										<xsl:text>Widget: </xsl:text>
+										<xsl:value-of select="@name"/>
+									</li>
+								</xsl:for-each>
+							</ul>
 						</td>
 					</tr>
 				</table>
