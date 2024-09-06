@@ -40,7 +40,7 @@
         </iiqdoc:setting>
 
 		<!-- Bundles (Roles) -->
-        <iiqdoc:setting key="includeBundleDetails" value="false" />
+        <iiqdoc:setting key="includeBundleDetails" value="true" />
 
 		<!-- Certifications -->
         <iiqdoc:setting key="includeCertificationDetails" value="true" />

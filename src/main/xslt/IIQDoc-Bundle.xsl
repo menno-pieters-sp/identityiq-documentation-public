@@ -250,6 +250,34 @@
 			</ul>
 		</xsl:if>
 
+		<!-- Required by other roles -->
+		<xsl:if test="//Bundle[Requirements/Reference[@name=$roleName]]">
+			<h4>Required by Roles</h4>
+			<xsl:for-each select="//Bundle[Requirements/Reference[@name=$roleName]]">
+					<li>
+						<xsl:call-template name="roleReferenceLink">
+							<xsl:with-param name="roleName">
+								<xsl:value-of select="@name"/>
+							</xsl:with-param>
+						</xsl:call-template>
+					</li>
+			</xsl:for-each>
+		</xsl:if>
+
+		<!-- Permitted by other roles -->
+		<xsl:if test="//Bundle[Permits/Reference[@name=$roleName]]">
+			<h4>Permitted by Roles</h4>
+			<xsl:for-each select="//Bundle[Permits/Reference[@name=$roleName]]">
+					<li>
+						<xsl:call-template name="roleReferenceLink">
+							<xsl:with-param name="roleName">
+								<xsl:value-of select="@name"/>
+							</xsl:with-param>
+						</xsl:call-template>
+					</li>
+			</xsl:for-each>
+		</xsl:if>
+
 		<!-- ProvisioningPlan -->
 		<xsl:if test="ProvisioningPlan">
 			<h4>Provisioning Plan</h4>
