@@ -515,4 +515,43 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+    <xsl:template name="tokenizeItems">
+        <xsl:param name="text"/>
+        <xsl:param name="delimiter" select="','"/>
+        <xsl:variable name="token" select="normalize-space(substring-before(concat($text, $delimiter), $delimiter))" />
+        <xsl:if test="$token">
+            <item>
+                <xsl:value-of select="$token"/>
+            </item>
+        </xsl:if>
+        <xsl:if test="contains($text, $delimiter)">
+            <!-- recursive call -->
+            <xsl:call-template name="tokenizeItems">
+                <xsl:with-param name="text" select="substring-after($text, $delimiter)"/>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+    <xsl:template name="delimitedStringContains">
+        <xsl:param name="text"/>
+        <xsl:param name="textToFind"/>
+        <xsl:param name="delimiter" select="','"/>
+        <xsl:if test="contains($text, $textToFind)">
+            <xsl:variable name="token" select="normalize-space(substring-before(concat($text, $delimiter), $delimiter))" />
+            <xsl:choose>
+                <xsl:when test="$token = $textToFind">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:if test="contains($text, $delimiter)">
+                        <!-- recursive call -->
+                        <xsl:call-template name="delimitedStringContains">
+                            <xsl:with-param name="text" select="substring-after($text, $delimiter)"/>
+                            <xsl:with-param name="delimiter" select="$delimiter"/>
+                            <xsl:with-param name="textToFind" select="$textToFind"/>
+                        </xsl:call-template>
+                    </xsl:if>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:template>
 </xsl:stylesheet>

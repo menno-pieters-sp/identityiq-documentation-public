@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:iiqdoc="http://iiqdoc.config.data">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:iiqdoc="http://iiqdoc.config.data" xmlns:exslt="http://exslt.org/common" exclude-result-prefixes="exslt">
     <xsl:output omit-xml-declaration="yes" indent="yes" />
     <xsl:template name="taskDefinitionReferenceLink">
         <xsl:param name="taskDefinitionName" />
@@ -17,6 +17,53 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+
+    <xsl:template name="taskPopulationOrGroupLink">
+        <xsl:param name="groupName"/>
+        <xsl:choose>
+            <xsl:when test="//GroupDefinition[not(Factory) and @name=normalize-space($groupName)]/@name">
+                <!-- Population -->
+                <xsl:text>Population: </xsl:text>
+                <xsl:call-template name="populationReferenceLink">
+                   <xsl:with-param name="populationName" select="$groupName"/> 
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="//GroupDefinition[Factory/Reference[@class='sailpoint.object.GroupFactory'] and @name=normalize-space($groupName)]/@name">
+                <!-- Factory Group -->
+                <xsl:text>Group Factory: </xsl:text>
+                <xsl:variable name="factoryName" select="//GroupDefinition[Factory/Reference[@class='sailpoint.object.GroupFactory'] and @name=normalize-space($groupName)]/Factory/Reference/@name"/>
+                <xsl:call-template name="groupFactoryReferenceLink">
+                    <xsl:with-param name="groupFactoryName" select="$factoryName"/>
+                </xsl:call-template>
+                <xsl:text>; Group: </xsl:text>
+                <xsl:value-of select="$groupName"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="concat('[',normalize-space($groupName),']')"/>
+            </xsl:otherwise>
+        </xsl:choose> 
+    </xsl:template>
+
+    <xsl:template name="taskPopulationOrGroupLinks">
+       <xsl:param name="delimitedGroupNames"/>
+       <xsl:param name="delimiter" select="','"/>
+       <xsl:variable name="groupName" select="normalize-space(substring-before(concat($delimitedGroupNames, $delimiter), $delimiter))" />
+        <xsl:if test="$groupName">
+            <li>
+                <xsl:call-template name="taskPopulationOrGroupLink">
+                    <xsl:with-param name="groupName" select="$groupName"/>
+                </xsl:call-template>
+            </li>
+        </xsl:if>
+        <xsl:if test="contains($delimitedGroupNames, $delimiter)">
+            <!-- recursive call -->
+            <xsl:call-template name="taskPopulationOrGroupLinks">
+                <xsl:with-param name="delimitedGroupNames" select="substring-after($delimitedGroupNames, $delimiter)"/>
+                <xsl:with-param name="delimiter" select="$delimiter"/>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+
     <xsl:template name="processTaskDefinitions">
 		<!--
 			The ImportAction is a KOGIT trick with a custom merge class. Supporting this here for code review.
@@ -267,7 +314,30 @@
                             <th class="rowHeader">List of group or population names to constrain the identities refreshed</th>
                             <td>
                                 <xsl:if test="Attributes/Map/entry[@key='filterGroups']">
-                                    <xsl:value-of select="Attributes/Map/entry[@key='filterGroups']/@value | Attributes/Map/entry[@key='filterGroups']/value" />
+                                    <xsl:if test="Attributes/Map/entry[@key='filterGroups']/@value">
+                                        <!-- split delimited string, link to population or group definition -->
+                                        <ul>
+                                            <xsl:call-template name="taskPopulationOrGroupLinks">
+                                                <xsl:with-param name="delimitedGroupNames" select="Attributes/Map/entry[@key='filterGroups']/@value"/> 
+                                                <xsl:with-param name="delimiter" select="','"/>
+                                            </xsl:call-template>
+                                        </ul>
+                                    </xsl:if>
+                                    <xsl:if test="Attributes/Map/entry[@key='filterGroups']/value/List/String">
+                                        <ul>
+                                            <xsl:for-each select="Attributes/Map/entry[@key='filterGroups']/value/List/String/text()">
+                                                <li>
+                                                    <xsl:variable name="groupName" select="normalize-space(.)"/>
+                                                    <xsl:call-template name="taskPopulationOrGroupLink">
+                                                        <xsl:with-param name="groupName" select="'Active Employees'"/>
+                                                    </xsl:call-template>    
+                                                </li>
+                                            </xsl:for-each>
+                                        </ul>
+                                    </xsl:if>
+                                    <!--
+                                        <xsl:value-of select="Attributes/Map/entry[@key='filterGroups']/@value | Attributes/Map/entry[@key='filterGroups']/value/List/String" />
+                                    -->
                                 </xsl:if>
                             </td>
                         </tr>

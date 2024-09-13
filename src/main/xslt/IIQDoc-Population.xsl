@@ -13,7 +13,22 @@
 					</xsl:attribute>
 					<xsl:value-of select="//GroupDefinition[@id=$populationId]/@name"/>
 				</a>
-			</xsl:when>
+	 		</xsl:when>
+			<xsl:when test="//GroupDefinition[@name=$populationName] and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentPopulations']/@value='true'">
+				<xsl:variable name="ownerName">
+					<xsl:for-each select="//GroupDefinition[@name=$populationName]/Owner/Reference/@name">
+						<xsl:if test="position() = 1">
+							<xsl:value-of select="string(.)"/>
+						</xsl:if>
+					</xsl:for-each>
+				</xsl:variable>
+				<a>
+					<xsl:attribute name="href">
+						<xsl:value-of select="concat('#Population - ', $populationName, ' - ', $ownerName)"/>
+					</xsl:attribute>
+					<xsl:value-of select="$populationName"/>
+				</a>
+	 		</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$populationName"/>
 			</xsl:otherwise>
@@ -26,6 +41,7 @@
 			<h1>Populations</h1>
 			<xsl:for-each select="//GroupDefinition[not(Factory)]">
 				<xsl:variable name="populationName" select="@name"/>
+				<xsl:variable name="populationId" select="@id"/>
 				<a>
 					<xsl:attribute name="name">
 						<xsl:value-of select="concat('Population - ', @id)" />
@@ -127,6 +143,45 @@
 										<xsl:value-of select="@name"/>
 									</li>
 								</xsl:for-each>
+								<!-- TaskDefinition for a refresh where a Population can be used -->
+								<xsl:for-each select="//TaskDefinition[Parent/Reference[@name='Identity Refresh'] and Attributes/Map/entry[@key='filterGroups' and contains(@value, $populationName)]]">
+									<xsl:sort select="@name"/>
+									<xsl:variable name="filterGroups" select="Attributes/Map/entry[@key='filterGroups']/@value"/>
+									<xsl:variable name="found">
+										<xsl:call-template name="delimitedStringContains">
+											<xsl:with-param name="text" select="$filterGroups"/>
+											<xsl:with-param name="textToFind" select="$populationName"/>
+											<xsl:with-param name="delimiter" select="','"/>
+										</xsl:call-template>
+									</xsl:variable>
+									<xsl:if test="normalize-space($found) = 'true'">
+										<li>
+											<xsl:text>Task: </xsl:text>
+											<xsl:call-template name="taskDefinitionReferenceLink">
+												<xsl:with-param name="taskDefinitionName" select="@name"/>
+											</xsl:call-template>
+										</li>
+									</xsl:if>
+								</xsl:for-each>
+								<!-- TODO: CertificationDefinition for an Advanced Certicifation where a Population can be used -->
+								<xsl:if test="$populationId">
+									<xsl:for-each select="/sailpoint/TaskSchedule[Arguments/Map/entry[@key='certificationDefinitionId']]">
+										<xsl:sort select="@name"/>
+										<xsl:variable name="taskScheduleId" select="@id"/>
+										<xsl:variable name="taskScheduleName" select="@name"/>
+										<xsl:variable name="certificationDefinitionId">
+											<xsl:value-of select="Arguments/Map/entry[@key='certificationDefinitionId']/@value"/>
+										</xsl:variable>	
+										<xsl:for-each select="//CertificationDefinition[(@id=$certificationDefinitionId or @name=$certificationDefinitionId) and ( (Attributes/Map/entry[@key='certificationType' and @value='Focused'] and Attributes/Map/entry[@key='entitySelectionType' and @value='Population'] and Attributes/Map/entry[@key='entityPopulation' and @value=$populationName]) or (Attributes/Map/entry[@key='certificationType' and @value='Group'] and Attributes/Map/entry[@key='iPOPCertifierMap']/value/Map/entry[@key=$populationId] ) )]">
+											<li>
+												<xsl:text>Certification: </xsl:text>
+												<xsl:call-template name="certificationScheduleReferenceLink">
+													<xsl:with-param name="certificationScheduleName" select="$taskScheduleName"/>
+												</xsl:call-template>
+											</li>
+										</xsl:for-each>
+									</xsl:for-each>
+								</xsl:if>
 							</ul>
 						</td>
 					</tr>
