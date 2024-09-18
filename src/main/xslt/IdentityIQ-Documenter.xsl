@@ -98,7 +98,7 @@ function unfoldSection(name) {
 					</ol>
 				</xsl:if>
 
-				<xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentApplications']/@value='true' and /sailpoint/Application or /sailpoint/ImportAction[@name='execute']/Application">
+				<xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentApplications']/@value='true' and (/sailpoint/Application or /sailpoint/ImportAction[@name='execute']/Application)">
 					<li>
 						<a href="#Heading-Application">Applications</a><xsl:text> </xsl:text><span onclick="toggleSection('Application')" id="triangle-Application" class="triangle-icon">&#9654;</span>
 					</li>
@@ -162,59 +162,62 @@ function unfoldSection(name) {
 						<a href="#Heading-Bundle">Roles</a><xsl:text> </xsl:text><span onclick="toggleSection('Bundle')" id="triangle-Bundle" class="triangle-icon">&#9654;</span>
 					</li>
 					<ol id="submenu-Bundle" style="display: none;">
-						<xsl:choose>
-							<xsl:when test="/sailpoint/ObjectConfig[@name='Bundle'] or /sailpoint/ImportAction[@name='merge' or @name='execute']/ObjectConfig[@name='Bundle']">
-								<!-- Organize by type of role -->
-								<xsl:for-each select="(/sailpoint|/sailpoint/ImportAction[@name='merge' or @name='execute'])/ObjectConfig[@name='Bundle']/Attributes/Map/entry[@key='roleTypeDefinitions']/value/List/RoleTypeDefinition">
-									<xsl:sort select="@displayName"/>
-									<xsl:variable name="roleType" select="@name"/>
-									<xsl:variable name="roleTypeDisplayName" select="@displayName"/>
-									<xsl:if test="/sailpoint/Bundle[@type=$roleType]">
+						<li><a href="#Bundle - Statistics">Role Statistics</a></li>
+						<xsl:if test="not(document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='bundleStatisticsOnly']/@value='true')">
+							<xsl:choose>
+								<xsl:when test="/sailpoint/ObjectConfig[@name='Bundle'] or /sailpoint/ImportAction[@name='merge' or @name='execute']/ObjectConfig[@name='Bundle']">
+									<!-- Organize by type of role -->
+									<xsl:for-each select="(/sailpoint|/sailpoint/ImportAction[@name='merge' or @name='execute'])/ObjectConfig[@name='Bundle']/Attributes/Map/entry[@key='roleTypeDefinitions']/value/List/RoleTypeDefinition">
+										<xsl:sort select="@displayName"/>
+										<xsl:variable name="roleType" select="@name"/>
+										<xsl:variable name="roleTypeDisplayName" select="@displayName"/>
+										<xsl:if test="/sailpoint/Bundle[@type=$roleType]">
+											<li>
+												<xsl:value-of select="$roleType" />
+												<xsl:text> </xsl:text>
+												<span class="triangle-icon">
+													<xsl:attribute name="onclick">
+														<xsl:text>toggleSection(&apos;Bundle-Type-</xsl:text><xsl:value-of select="$roleType"/><xsl:text>&apos;)</xsl:text>
+													</xsl:attribute>
+													<xsl:attribute name="id">
+														<xsl:value-of select="concat('triangle-Bundle-Type-', $roleType)"/>
+													</xsl:attribute>
+													<xsl:text>&#9654;</xsl:text>
+										  		</span>
+												<ol style="display: none;">
+													<xsl:attribute name="id">
+														<xsl:value-of select="concat('submenu-Bundle-Type-', $roleType)"/>
+													</xsl:attribute>
+													<xsl:for-each select="/sailpoint/Bundle[@type=$roleType]">
+														<xsl:sort select="@name"/>
+														<li>
+															<xsl:call-template name="roleReferenceLink">
+																<xsl:with-param name="roleName">
+																	<xsl:value-of select="@name"/>
+																</xsl:with-param>
+															</xsl:call-template>
+														</li>
+													</xsl:for-each>
+												</ol>
+											</li>
+										</xsl:if>
+									</xsl:for-each>								
+								</xsl:when>
+								<xsl:otherwise>
+									<!-- Just iterate over all the roles in the file -->
+									<xsl:for-each select="/sailpoint/Bundle">
+										<xsl:sort select="@name"/>
 										<li>
-											<xsl:value-of select="$roleType" />
-											<xsl:text> </xsl:text>
-											<span class="triangle-icon">
-												<xsl:attribute name="onclick">
-													<xsl:text>toggleSection(&apos;Bundle-Type-</xsl:text><xsl:value-of select="$roleType"/><xsl:text>&apos;)</xsl:text>
-												</xsl:attribute>
-												<xsl:attribute name="id">
-													<xsl:value-of select="concat('triangle-Bundle-Type-', $roleType)"/>
-												</xsl:attribute>
-											  <xsl:text>&#9654;</xsl:text>
-										  </span>
-											<ol style="display: none;">
-												<xsl:attribute name="id">
-													<xsl:value-of select="concat('submenu-Bundle-Type-', $roleType)"/>
-												</xsl:attribute>
-												<xsl:for-each select="/sailpoint/Bundle[@type=$roleType]">
-													<xsl:sort select="@name"/>
-													<li>
-														<xsl:call-template name="roleReferenceLink">
-															<xsl:with-param name="roleName">
-																<xsl:value-of select="@name"/>
-															</xsl:with-param>
-														</xsl:call-template>
-													</li>
-												</xsl:for-each>
-											</ol>
+											<xsl:call-template name="roleReferenceLink">
+												<xsl:with-param name="roleName">
+													<xsl:value-of select="@name"/>
+												</xsl:with-param>
+											</xsl:call-template>
 										</li>
-									</xsl:if>
-								</xsl:for-each>
-							</xsl:when>
-							<xsl:otherwise>
-								<!-- Just iterate over all the roles in the file -->
-								<xsl:for-each select="/sailpoint/Bundle">
-									<xsl:sort select="@name"/>
-									<li>
-										<xsl:call-template name="roleReferenceLink">
-											<xsl:with-param name="roleName">
-												<xsl:value-of select="@name"/>
-											</xsl:with-param>
-										</xsl:call-template>
-									</li>
-								</xsl:for-each>
-							</xsl:otherwise>
-						</xsl:choose>
+									</xsl:for-each>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:if>
 					</ol>
 				</xsl:if>
 

@@ -324,11 +324,124 @@
 		</xsl:if>
 	</xsl:template>
 
+	<xsl:template name="processBundleStatistics">
+		<a name="Bundle - Statistics"/>
+		<h2>Role Statistics</h2>
+		<table class="mapTable">
+                <tr>
+                    <th class="rowHeader">Total Number of Roles</th>
+                    <td class="mapTable">
+                        <xsl:value-of select="count(/sailpoint/Bundle)"/>
+						<xsl:text> (disabled: </xsl:text>
+						<xsl:value-of select="count(/sailpoint/Bundle[@disabled='true'])"/>
+						<xsl:text>)</xsl:text>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2" class="rowHeader">Count per Role Type</th>
+                </tr>
+				<xsl:for-each select="(/sailpoint|/sailpoint/ImportAction[@name='merge' or @name='execute'])/ObjectConfig[@name='Bundle']/Attributes/Map/entry[@key='roleTypeDefinitions']/value/List/RoleTypeDefinition">
+					<xsl:sort select="@displayName"/>
+					<xsl:variable name="roleType" select="@name"/>
+					<xsl:variable name="roleTypeDisplayName" select="@displayName"/>
+					<tr>
+                    	<th class="rowHeader"><xsl:value-of select="$roleType"/></th>
+                    	<td class="mapTable">
+							<xsl:value-of select="count(/sailpoint/Bundle[@type=$roleType])"/>
+							<xsl:text> (disabled: </xsl:text>
+							<xsl:value-of select="count(/sailpoint/Bundle[@type=$roleType and @disabled='true'])"/>
+							<xsl:text>)</xsl:text>
+						</td>
+      		        </tr>
+				</xsl:for-each>
+                <tr>
+                    <th colspan="2" class="rowHeader">Other</th>
+                </tr>
+                <tr>
+                    <th class="rowHeader">Roles Pending Deletion</th>
+                    <td class="mapTable">
+						<xsl:value-of select="count(/sailpoint/Bundle[@pendingDelete='true'])"/>
+					</td>
+                </tr>
+                <tr>
+                    <th class="rowHeader">Roles with a Single Entitlement</th>
+                    <td class="mapTable">
+						<ul>
+							<xsl:for-each select="(/sailpoint|/sailpoint/ImportAction[@name='merge' or @name='execute'])/ObjectConfig[@name='Bundle']/Attributes/Map/entry[@key='roleTypeDefinitions']/value/List/RoleTypeDefinition">
+								<xsl:variable name="roleType" select="@name"/>
+								<xsl:variable name="roleTypeDisplayName" select="@displayName"/>
+								<xsl:variable name="roleCount" select="count(/sailpoint/Bundle[@type=$roleType and count(Profiles/Profile/Constraints/Filter[@operation='CONTAINS_ALL']/Value/List/String)=1])"/>
+								<xsl:if test="$roleCount > 0">
+									<li>
+										<xsl:value-of select="$roleTypeDisplayName"/>
+										<xsl:text>: </xsl:text>
+										<xsl:value-of select="$roleCount"/>
+									</li>
+								</xsl:if>
+							</xsl:for-each>
+						</ul>
+					</td>
+                </tr>
+                <tr>
+                    <th class="rowHeader">Assignable Roles with Direct Entitlements</th>
+                    <td class="mapTable">
+						<ul>
+							<xsl:for-each select="(/sailpoint|/sailpoint/ImportAction[@name='merge' or @name='execute'])/ObjectConfig[@name='Bundle']/Attributes/Map/entry[@key='roleTypeDefinitions']/value/List/RoleTypeDefinition[not(@noAutoAssignment='true' or @noManualAssignment='true')]">
+								<xsl:variable name="roleType" select="@name"/>
+								<xsl:variable name="roleTypeDisplayName" select="@displayName"/>
+								<xsl:variable name="roleCount" select="count(/sailpoint/Bundle[@type=$roleType and Profiles/Profile/Constraints/Filter])"/>
+								<xsl:if test="$roleCount > 0">
+									<li>
+										<xsl:value-of select="$roleTypeDisplayName"/>
+										<xsl:text>: </xsl:text>
+										<xsl:value-of select="$roleCount"/>
+									</li>
+								</xsl:if>
+							</xsl:for-each>
+						</ul>
+					</td>
+                </tr>
+                <tr>
+                    <th class="rowHeader">Assignable Roles without Permitted or Required Roles, Provisioning Policy or Entitlements</th>
+                    <td class="mapTable">
+						<ul>
+							<xsl:for-each select="(/sailpoint|/sailpoint/ImportAction[@name='merge' or @name='execute'])/ObjectConfig[@name='Bundle']/Attributes/Map/entry[@key='roleTypeDefinitions']/value/List/RoleTypeDefinition[not(@noAutoAssignment='true' or @noManualAssignment='true')]">
+								<xsl:variable name="roleType" select="@name"/>
+								<xsl:variable name="roleTypeDisplayName" select="@displayName"/>
+								<xsl:variable name="roleCount" select="count(/sailpoint/Bundle[@type=$roleType and not(Profiles/Profile/Constraints/Filter) and not(Permits/Reference) and not(Requirements/Reference) and not(ProvisioningPlan/AccountRequest[@application='IIQ']/AttributeRequest) and not(ProvisioningForms/Form/Section/Field)])"/>
+								<xsl:if test="$roleCount > 0">
+									<li>
+										<xsl:value-of select="$roleTypeDisplayName"/>
+										<xsl:text>: </xsl:text>
+										<xsl:value-of select="$roleCount"/>
+									</li>
+								</xsl:if>
+							</xsl:for-each>
+						</ul>
+					</td>
+                </tr>
+                <tr>
+                    <th class="rowHeader">Roles with Required Roles</th>
+                    <td class="mapTable">
+						<xsl:value-of select="count(/sailpoint/Bundle[Requirements/Reference])"/>
+					</td>
+                </tr>
+                <tr>
+                    <th class="rowHeader">Roles with Permitted Roles</th>
+                    <td class="mapTable">
+						<xsl:value-of select="count(/sailpoint/Bundle[Permits/Reference])"/>
+					</td>
+                </tr>
+		</table>
+	</xsl:template>
+
 	<xsl:template name="processBundles">
 		<xsl:if test="/sailpoint/Bundle and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentBundles']/@value='true'">
 			<a name="Heading-Bundle"/>
 			<h1>Roles</h1>
 
+			<xsl:call-template name="processBundleStatistics"/>
+			<xsl:if test="not(document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='bundleStatisticsOnly']/@value='true')">
 			<xsl:choose>
 				<xsl:when test="/sailpoint/ObjectConfig[@name='Bundle'] or /sailpoint/ImportAction[@name='merge' or @name='execute']/ObjectConfig[@name='Bundle']">
 					<!-- Organize by type of role -->
@@ -352,6 +465,7 @@
 					</xsl:for-each>
 				</xsl:otherwise>
 			</xsl:choose>
+			</xsl:if>
 		</xsl:if>
 	</xsl:template>
 
