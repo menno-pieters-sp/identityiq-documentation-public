@@ -163,6 +163,17 @@ function unfoldSection(name) {
 					</li>
 					<ol id="submenu-Bundle" style="display: none;">
 						<li><a href="#Bundle - Statistics">Role Statistics</a></li>
+						<xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='bundleModelAnalysis']/@value='true'">
+							<li>
+								<a href="#Bundle - Role Model Analysis">Role Model Analysis</a><xsl:text> </xsl:text><span onclick="toggleSection('RoleModelAnalysis')" id="triangle-Bundle" class="triangle-icon">&#9654;</span>
+							</li>
+							<ol id="submenu-Bundle-RoleModelAnalysis">
+								<li><a href="#Bundle - Role Model Analysis - Detectable Roles without Entitlements or Provisioning Policies">Detectable Roles without Entitlements or Provisioning Policies</a></li>
+								<li><a href="#Bundle - Role Model Analysis - Detectable Roles with a Single Entitlement">Detectable Roles with a Single Entitlement</a></li>
+								<li><a href="#Bundle - Role Model Analysis - Assignable Roles without permitted or required roles">Assignable Roles without permitted or required roles</a></li>
+								<li><a href="#Bundle - Role Model Analysis - Detectable roles that are not permitted, required or inherited">Detectable roles that are not permitted, required or inherited</a></li>
+							</ol>
+						</xsl:if>
 						<xsl:if test="not(document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='bundleStatisticsOnly']/@value='true')">
 							<xsl:choose>
 								<xsl:when test="/sailpoint/ObjectConfig[@name='Bundle'] or /sailpoint/ImportAction[@name='merge' or @name='execute']/ObjectConfig[@name='Bundle']">
