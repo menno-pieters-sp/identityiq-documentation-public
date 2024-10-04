@@ -18,6 +18,7 @@
         <iiqdoc:setting key="documentGroupFactories" value="true" />
         <iiqdoc:setting key="documentPopulations" value="true" />
         <iiqdoc:setting key="documentLifecycleEvents" value="true" />
+        <iiqdoc:setting key="documentCertifications" value="false" />
         <iiqdoc:setting key="showExtendedAttributeCategory" value="true" />
 
 		<!-- Applications -->
@@ -41,6 +42,8 @@
 
 		<!-- Bundles (Roles) -->
         <iiqdoc:setting key="includeBundleDetails" value="true" />
+        <iiqdoc:setting key="bundleStatisticsOnly" value="false" />
+        <iiqdoc:setting key="bundleModelAnalysis" value="true" />
 
 		<!-- Certifications -->
         <iiqdoc:setting key="includeCertificationDetails" value="true" />
