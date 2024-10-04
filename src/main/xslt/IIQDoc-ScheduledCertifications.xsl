@@ -354,7 +354,7 @@
 	</xsl:template>
 
 	<xsl:template name="processScheduledCertifications">
-		<xsl:if test="/sailpoint/TaskSchedule[Arguments/Map/entry[@key='certificationDefinitionId']]">
+		<xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentCertifications']/@value='true' and /sailpoint/TaskSchedule[Arguments/Map/entry[@key='certificationDefinitionId']]">
 			<a name="Heading-Certifications"/>
 			<h1>Certifications</h1>
 			<xsl:for-each select="/sailpoint/TaskSchedule[Arguments/Map/entry[@key='certificationDefinitionId']]">

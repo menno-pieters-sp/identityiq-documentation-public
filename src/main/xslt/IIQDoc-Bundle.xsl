@@ -463,6 +463,7 @@
 						<xsl:variable name="roleCount" select="count(/sailpoint/Bundle[not(@disabled='true') and Selector/IdentitySelector/RuleRef/Reference])"/>
 						<xsl:value-of select="$roleCount"/>
 						<xsl:if test="$roleCount > 0">
+							<p><xsl:text>Rules:</xsl:text></p>
 							<ol>
 								<xsl:for-each select="/sailpoint/Bundle[not(@disabled='true')]/Selector/IdentitySelector/RuleRef/Reference[generate-id() = generate-id(key('assignmentRules', @name)[1])]">
 									<xsl:sort select="@name"/>
@@ -494,6 +495,7 @@
 						<xsl:variable name="roleCount" select="count(/sailpoint/Bundle[not(@disabled='true') and Selector/IdentitySelector/PopulationRef/Reference])"/>
 						<xsl:value-of select="$roleCount"/>
 						<xsl:if test="$roleCount > 0">
+							<p><xsl:text>Populations:</xsl:text></p>
 							<ol>
 								<xsl:for-each select="/sailpoint/Bundle[not(@disabled='true')]/Selector/IdentitySelector/PopulationRef/Reference[generate-id() = generate-id(key('assignmentPopulations', @name)[1])]">
 									<xsl:sort select="@name"/>

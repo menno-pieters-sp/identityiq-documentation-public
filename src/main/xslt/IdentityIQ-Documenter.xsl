@@ -291,7 +291,7 @@ function unfoldSection(name) {
 				</xsl:if>
 
 				<!-- Scheduled Certifications -->
-				<xsl:if test="/sailpoint/TaskSchedule[Arguments/Map/entry[@key='certificationDefinitionId']]">
+				<xsl:if test="/sailpoint/TaskSchedule[Arguments/Map/entry[@key='certificationDefinitionId']] and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='documentCertifications']/@value='true'">
 					<li>
 						<a href="#Heading-Certifications">Certifications</a><xsl:text> </xsl:text><span onclick="toggleSection('Certifications')" id="triangle-Certifications" class="triangle-icon">&#9654;</span>
 					</li>
