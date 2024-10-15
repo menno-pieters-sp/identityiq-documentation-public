@@ -169,7 +169,8 @@ function unfoldSection(name) {
 							</li>
 							<ol id="submenu-Bundle-RoleModelAnalysis">
 								<li><a href="#Bundle - Role Model Analysis - Detectable Roles without Entitlements or Provisioning Policies">Detectable Roles without Entitlements or Provisioning Policies</a></li>
-								<li><a href="#Bundle - Role Model Analysis - Detectable Roles with a Single Entitlement">Detectable Roles with a Single Entitlement</a></li>
+								<li><a href="#Bundle - Role Model Analysis - Detectable Roles with a Single Entitlement">Detectable Roles with a Single Entitlement (not 1-1-1)</a></li>
+								<li><a href="#Bundle - Role Model Analysis - Detectable Roles with a Single Entitlement in a 1-1-1 Hierarchy">Detectable Roles with a Single Entitlement in a 1-1-1 Hierarchy</a></li>
 								<li><a href="#Bundle - Role Model Analysis - Assignable Roles without permitted or required roles">Assignable Roles without permitted or required roles</a></li>
 								<li><a href="#Bundle - Role Model Analysis - Detectable roles that are not permitted, required or inherited">Detectable roles that are not permitted, required or inherited</a></li>
 							</ol>
@@ -540,6 +541,9 @@ function unfoldSection(name) {
 
 						<hr/>
 						<h1>Credits</h1>
+						<p>Copyright &copy; 2016 Everett</p>
+						<p>Copyright &copy; 2017-2024 SailPoint Technologies</p>
+						<p>Technologies used in this tool:</p>
 						<ul>
 							<li><div>Icons made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div></li>
 							<li><div>Library <a href="http://cron-parser.com/" title="Cron-Utils">Cron-Utils</a> from <a href="http://cron-parser.com/" title="Cron-Utils">cron-parser.com</a> is licensed by <a href="https://github.com/jmrozanec/cron-utils/blob/master/LICENSE" title="Apache License 2.0" target="_blank">Apache License 2.0</a></div></li>

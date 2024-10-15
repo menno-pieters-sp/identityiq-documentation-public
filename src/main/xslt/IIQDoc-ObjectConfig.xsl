@@ -318,7 +318,7 @@
 							<th>Indexed</th>
 							<th>Stored</th>
 						</tr>
-						<xsl:for-each select="ObjectAttribute[extendedNumber or @namedColumn='true']">
+						<xsl:for-each select="ObjectAttribute[@extendedNumber or @namedColumn='true']">
 							<xsl:sort select="name"/>
 							<xsl:variable name="attributeName" select="@name"/>
 							<xsl:choose>

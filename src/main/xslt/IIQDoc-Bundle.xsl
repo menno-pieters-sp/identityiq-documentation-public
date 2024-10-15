@@ -144,58 +144,60 @@
 				</tr>
 			</xsl:if>
 		</table>
-
-		<!-- Bundle Extended Attributes -->
-		<xsl:if test="//ObjectConfig[@name='Bundle']/ObjectAttribute">
-			<h4>Extended Attributes</h4>
-			<table class="bundleExtendedAttributes">
-				<tr>
-					<xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='showExtendedAttributeCategory']/@value='true'">
-						<th>Category</th>
-					</xsl:if>
-					<th>Name</th>
-					<th>Value</th>
-				</tr>
-				<xsl:for-each select="//ObjectConfig[@name='Bundle']/ObjectAttribute">
-					<xsl:variable name="extendedAttributeName" select="normalize-space(@name)"/>
-					<xsl:variable name="extendedAttributeDisplayName">
-						<xsl:choose>
-							<xsl:when test="@displayName">
-								<xsl:value-of select="@displayName"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="@name"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:variable>
-					<xsl:variable name="extendedAttributeType" select="@type" />
-					<xsl:variable name="extendedAttributeValue" select="/sailpoint/Bundle[@name=$roleName]/Attributes/Map/entry[@key=$extendedAttributeName]/value/node() | /sailpoint/Bundle[@name=$roleName]/Attributes/Map/entry[@key=$extendedAttributeName]/@value"/>
+		
+		<xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='includeBundleDetails']/@value='true'">
+			<!-- Bundle Extended Attributes -->
+			<xsl:if test="//ObjectConfig[@name='Bundle']/ObjectAttribute">
+				<h4>Extended Attributes</h4>
+				<table class="bundleExtendedAttributes">
 					<tr>
 						<xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='showExtendedAttributeCategory']/@value='true'">
-							<td><xsl:value-of select="@categoryName"/></td>
+							<th>Category</th>
 						</xsl:if>
-						<td><xsl:value-of select="$extendedAttributeDisplayName"/></td>
-						<td>
+						<th>Name</th>
+						<th>Value</th>
+					</tr>
+					<xsl:for-each select="//ObjectConfig[@name='Bundle']/ObjectAttribute">
+						<xsl:variable name="extendedAttributeName" select="normalize-space(@name)"/>
+						<xsl:variable name="extendedAttributeDisplayName">
 							<xsl:choose>
-								<xsl:when test="$extendedAttributeType = 'Identity' or $extendedAttributeType = 'sailpoint.object.Identity'">
-									<xsl:call-template name="workgroupOrIdentityLinkById">
-										<xsl:with-param name="identityId" select="$extendedAttributeValue" />
-									</xsl:call-template>
-								</xsl:when>
-								<xsl:when test="$extendedAttributeType = 'boolean'">
-									<xsl:variable name="boolVal" select="/sailpoint/Bundle[@name=$roleName]/Attributes/Map/entry[@key=$extendedAttributeName]/value | /sailpoint/Bundle[@name=$roleName]/Attributes/Map/entry[@key=$extendedAttributeName]/@value" />
-									<xsl:call-template name="parseTextToBoolean">
-										<xsl:with-param name="boolVal" select="$boolVal" />
-									</xsl:call-template>
+								<xsl:when test="@displayName">
+									<xsl:value-of select="@displayName"/>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:value-of select="$extendedAttributeValue"/>
+									<xsl:value-of select="@name"/>
 								</xsl:otherwise>
 							</xsl:choose>
-						</td>
-					</tr>
-				</xsl:for-each>
-			</table>
+						</xsl:variable>
+						<xsl:variable name="extendedAttributeType" select="@type" />
+						<xsl:variable name="extendedAttributeValue" select="/sailpoint/Bundle[@name=$roleName]/Attributes/Map/entry[@key=$extendedAttributeName]/value/node() | /sailpoint/Bundle[@name=$roleName]/Attributes/Map/entry[@key=$extendedAttributeName]/@value"/>
+						<tr>
+							<xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='showExtendedAttributeCategory']/@value='true'">
+								<td><xsl:value-of select="@categoryName"/></td>
+							</xsl:if>
+							<td><xsl:value-of select="$extendedAttributeDisplayName"/></td>
+							<td>
+								<xsl:choose>
+									<xsl:when test="$extendedAttributeType = 'Identity' or $extendedAttributeType = 'sailpoint.object.Identity'">
+										<xsl:call-template name="workgroupOrIdentityLinkById">
+											<xsl:with-param name="identityId" select="$extendedAttributeValue" />
+										</xsl:call-template>
+									</xsl:when>
+									<xsl:when test="$extendedAttributeType = 'boolean'">
+										<xsl:variable name="boolVal" select="/sailpoint/Bundle[@name=$roleName]/Attributes/Map/entry[@key=$extendedAttributeName]/value | /sailpoint/Bundle[@name=$roleName]/Attributes/Map/entry[@key=$extendedAttributeName]/@value" />
+										<xsl:call-template name="parseTextToBoolean">
+											<xsl:with-param name="boolVal" select="$boolVal" />
+										</xsl:call-template>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="$extendedAttributeValue"/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</td>
+						</tr>
+					</xsl:for-each>
+				</table>
+			</xsl:if>
 		</xsl:if>
 
 		<!-- Assignment Logic -->
@@ -253,11 +255,12 @@
 				</xsl:for-each>
 			</ul>
 		</xsl:if>
-
-		<!-- Required by other roles -->
-		<xsl:if test="//Bundle[Requirements/Reference[@name=$roleName]]">
-			<h4>Required by Roles</h4>
-			<xsl:for-each select="//Bundle[Requirements/Reference[@name=$roleName]]">
+		
+		<xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='includeBundleDetails']/@value='true'">
+			<!-- Required by other roles -->
+			<xsl:if test="//Bundle[Requirements/Reference[@name=$roleName]]">
+				<h4>Required by Roles</h4>
+				<xsl:for-each select="//Bundle[Requirements/Reference[@name=$roleName]]">
 					<li>
 						<xsl:call-template name="roleReferenceLink">
 							<xsl:with-param name="roleName">
@@ -265,13 +268,13 @@
 							</xsl:with-param>
 						</xsl:call-template>
 					</li>
-			</xsl:for-each>
-		</xsl:if>
-
-		<!-- Permitted by other roles -->
-		<xsl:if test="//Bundle[Permits/Reference[@name=$roleName]]">
-			<h4>Permitted by Roles</h4>
-			<xsl:for-each select="//Bundle[Permits/Reference[@name=$roleName]]">
+				</xsl:for-each>
+			</xsl:if>
+			
+			<!-- Permitted by other roles -->
+			<xsl:if test="//Bundle[Permits/Reference[@name=$roleName]]">
+				<h4>Permitted by Roles</h4>
+				<xsl:for-each select="//Bundle[Permits/Reference[@name=$roleName]]">
 					<li>
 						<xsl:call-template name="roleReferenceLink">
 							<xsl:with-param name="roleName">
@@ -279,7 +282,8 @@
 							</xsl:with-param>
 						</xsl:call-template>
 					</li>
-			</xsl:for-each>
+				</xsl:for-each>
+			</xsl:if>
 		</xsl:if>
 
 		<!-- ProvisioningPlan -->
@@ -546,8 +550,11 @@
 							</ol>
 					</xsl:if>
 				</xsl:for-each>
-				<!-- Detectable Roles with a Single Entitlement -->
-				<a name="Bundle - Role Model Analysis - Detectable Roles with a Single Entitlement"/><h3>Detectable Roles with a Single Entitlement</h3>
+				<!-- Detectable Roles with a Single Entitlement, but not 1-1-1. -->
+				<a name="Bundle - Role Model Analysis - Detectable Roles with a Single Entitlement"/><h3>Detectable Roles with a Single Entitlement (not 1-1-1)</h3>
+				<p>
+					<xsl:text>Detectable roles that have only a single entitlement are considered inefficient and could lead to role explosion. This sections lists the roles that have a single entitlement but are not the only detectable role in a business role.</xsl:text>
+				</p>
 				<xsl:for-each select="(/sailpoint|/sailpoint/ImportAction[@name='merge' or @name='execute'])/ObjectConfig[@name='Bundle']/Attributes/Map/entry[@key='roleTypeDefinitions']/value/List/RoleTypeDefinition[not(@noDetection='true' or @noDetectionUnlessAssigned='true')]">
 					<xsl:sort select="@displayName"/>
 					<xsl:variable name="roleType" select="@name"/>
@@ -565,13 +572,15 @@
 					</xsl:variable>
 					<xsl:if test="$roleCount > 0">
 						<h4><xsl:value-of select="$roleTypeDisplayName"/></h4>
-							<ol>
-								<xsl:for-each select="/sailpoint/Bundle[not(@disabled='true') and @type=$roleType and count(Profiles/Profile/Constraints/Filter[@operation='CONTAINS_ALL']/Value/List/String)=1]">
-									<xsl:sort select="@displayName"/>
-									<xsl:variable name="roleName" select="@name"/>
-									<xsl:variable name="roleRequiredCount" select="count(/sailpoint/Bundle[Requirements/Reference[@name=$roleName]])"/>
-									<xsl:variable name="rolePermittedCount" select="count(/sailpoint/Bundle[Permits/Reference[@name=$roleName]])"/>
-									<xsl:variable name="roleInheritedCount" select="count(/sailpoint/Bundle[@type=$roleType and Inheritance/Reference[@name=$roleName]])"/>
+						<ol>
+							<xsl:for-each select="/sailpoint/Bundle[not(@disabled='true') and @type=$roleType and count(Profiles/Profile/Constraints/Filter[@operation='CONTAINS_ALL']/Value/List/String)=1]">
+								<xsl:sort select="@displayName"/>
+								<xsl:variable name="roleName" select="@name"/>
+								<xsl:variable name="roleRequiredCount" select="count(/sailpoint/Bundle[Requirements/Reference[@name=$roleName]])"/>
+								<xsl:variable name="rolePermittedCount" select="count(/sailpoint/Bundle[Permits/Reference[@name=$roleName]])"/>
+								<xsl:variable name="roleInheritedCount" select="count(/sailpoint/Bundle[@type=$roleType and Inheritance/Reference[@name=$roleName]])"/>
+								<xsl:variable name="reqAndPermCount" select="count(/sailpoint/Bundle[Permits/Reference[@name=$roleName]]/Permits/Reference) + count(/sailpoint/Bundle[Requirements/Reference[@name=$roleName]]/Requirements/Reference) "/>
+								<xsl:if test="$reqAndPermCount != 1">
 									<li>
 										<xsl:call-template name="roleReferenceLink">
 											<xsl:with-param name="roleName" select="$roleName"/>
@@ -596,13 +605,6 @@
 														<xsl:when test="$roleRequiredCount + $rolePermittedCount = 0">
 															<xsl:text>&#10060;</xsl:text>
 														</xsl:when>
-														<xsl:when test="$roleRequiredCount + $rolePermittedCount = 1">
-															<xsl:variable name="reqAndPermCount" select="count(/sailpoint/Bundle[Permits/Reference[@name=$roleName]]/Permits/Reference) + count(/sailpoint/Bundle[Requirements/Reference[@name=$roleName]]/Requirements/Reference) "/>
-															<xsl:text>&#x26a0;</xsl:text>
-															<xsl:if test="$reqAndPermCount=1">
-																<xsl:text> 1-1-1 Role Hierarchy</xsl:text>
-															</xsl:if>
-														</xsl:when>
 													</xsl:choose>
 												</li>
 											</xsl:if>
@@ -611,8 +613,63 @@
 											</li>
 										</ul>
 									</li>
-								</xsl:for-each>
-							</ol>
+								</xsl:if>
+							</xsl:for-each>
+						</ol>
+					</xsl:if>
+				</xsl:for-each>
+				<!-- Detectable Roles with a Single Entitlement in a 1-1-1 hierarchy. -->
+				<a name="Bundle - Role Model Analysis - Detectable Roles with a Single Entitlement in a 1-1-1 Hierarchy"/><h3>Detectable Roles with a Single Entitlement in a 1-1-1 Hierarchy</h3>
+				<p>
+					<xsl:text>Detectable roles that have only a single entitlement are considered inefficient and could lead to role explosion. This sections lists the roles that have a single entitlement and are the only detectable role in a business role.</xsl:text>
+				</p>
+				<xsl:for-each select="(/sailpoint|/sailpoint/ImportAction[@name='merge' or @name='execute'])/ObjectConfig[@name='Bundle']/Attributes/Map/entry[@key='roleTypeDefinitions']/value/List/RoleTypeDefinition[not(@noDetection='true' or @noDetectionUnlessAssigned='true')]">
+					<xsl:sort select="@displayName"/>
+					<xsl:variable name="roleType" select="@name"/>
+					<xsl:variable name="roleTypeDisplayName" select="@displayName"/>
+					<xsl:variable name="roleCount" select="count(/sailpoint/Bundle[not(@disabled='true') and @type=$roleType and count(Profiles/Profile/Constraints/Filter[@operation='CONTAINS_ALL']/Value/List/String)=1])"/>
+					<xsl:variable name="hybridRole">
+						<xsl:choose>
+							<xsl:when test="not(@noAutoAssignment='true' and @noManualAssignment='true')">
+								<xsl:value-of select="'true'"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="'false'"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+					<xsl:if test="$roleCount > 0">
+						<h4><xsl:value-of select="$roleTypeDisplayName"/></h4>
+						<ol>
+							<xsl:for-each select="/sailpoint/Bundle[not(@disabled='true') and @type=$roleType and count(Profiles/Profile/Constraints/Filter[@operation='CONTAINS_ALL']/Value/List/String)=1]">
+								<xsl:sort select="@displayName"/>
+								<xsl:variable name="roleName" select="@name"/>
+								<xsl:variable name="roleInheritedCount" select="count(/sailpoint/Bundle[@type=$roleType and Inheritance/Reference[@name=$roleName]])"/>
+								<xsl:variable name="reqAndPermCount" select="count(/sailpoint/Bundle[Permits/Reference[@name=$roleName]]/Permits/Reference) + count(/sailpoint/Bundle[Requirements/Reference[@name=$roleName]]/Requirements/Reference) "/>
+								<xsl:if test="$reqAndPermCount = 1">
+									<li>
+										<xsl:call-template name="roleReferenceLink">
+											<xsl:with-param name="roleName" select="$roleName"/>
+										</xsl:call-template>
+										<xsl:if test="$hybridRole='true'">
+											<xsl:text> (hybrid)</xsl:text>
+										</xsl:if>
+										<xsl:if test="$roleInheritedCount > 0"> 
+											<xsl:value-of select="concat('. Inherited by Roles (', $roleTypeDisplayName, '): ', $roleInheritedCount)"/>
+											<ul>
+												<xsl:for-each select="/sailpoint/Bundle[@type=$roleType and Inheritance/Reference[@name=$roleName]]">
+													<li>
+														<xsl:call-template name="roleReferenceLink">
+															<xsl:with-param name="roleName" select="@name"/>	
+														</xsl:call-template>
+													</li>
+												</xsl:for-each>
+											</ul>
+										</xsl:if>
+									</li>
+								</xsl:if>
+							</xsl:for-each>
+						</ol>
 					</xsl:if>
 				</xsl:for-each>
 				<!-- Assignable roles without permitted or required roles -->
