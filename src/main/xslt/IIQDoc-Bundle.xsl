@@ -74,78 +74,80 @@
 				<td><b>Type:</b></td>
 				<td><xsl:value-of select="@type"/></td>
 			</tr>
-			<tr>
-				<td><b>Owner:</b></td>
-				<td>
-					<xsl:call-template name="workgroupOrIdentityLink">
-						<xsl:with-param name="identityName" select="Owner/Reference/@name"/>
-					</xsl:call-template>
-				</td>
-			</tr>
-			<tr>
-				<td><b>Description:</b></td>
-				<td>
-					<xsl:choose>
-						<xsl:when test="Attributes/Map/entry[@key='sysDescriptions']/value/Map/entry[@key='en_US']/@value | Attributes/Map/entry[@key='sysDescriptions']/value/Map/entry[@key='en_US']/value">
-							<xsl:value-of select="Attributes/Map/entry[@key='sysDescriptions']/value/Map/entry[@key='en_US']/@value | Attributes/Map/entry[@key='sysDescriptions']/value/Map/entry[@key='en_US']/value" />
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="Attributes/Map/entry[@key='sysDescriptions']/value/Map/entry[1]/@value | Attributes/Map/entry[@key='sysDescriptions']/value/Map/entry[1]/value" />
-						</xsl:otherwise>
-					</xsl:choose>
-				</td>
-			</tr>
-			<xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='includeBundleDetails']/@value='true'">
+			<xsl:if test="not(document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='minimalRoleRelations']/@value='true')">
 				<tr>
-					<td><b>Enable Activity Monitoring:</b></td>
+					<td><b>Owner:</b></td>
 					<td>
-						<xsl:if test="ActivityConfig/@allEnabled = 'true'">
-							<xsl:text>Yes</xsl:text>
-				  	</xsl:if>
+						<xsl:call-template name="workgroupOrIdentityLink">
+							<xsl:with-param name="identityName" select="Owner/Reference/@name"/>
+						</xsl:call-template>
 					</td>
 				</tr>
 				<tr>
-					<td><b>Provision both profiles and policies:</b></td>
+					<td><b>Description:</b></td>
 					<td>
-						<xsl:if test="Attributes/Map/entry[@key='mergeTemplates']/@value = 'true' or Attributes/Map/entry[@key='mergeTemplates']/value/Boolean/text() = 'true'">
-							<xsl:text>Yes</xsl:text>
-				  	</xsl:if>
+						<xsl:choose>
+							<xsl:when test="Attributes/Map/entry[@key='sysDescriptions']/value/Map/entry[@key='en_US']/@value | Attributes/Map/entry[@key='sysDescriptions']/value/Map/entry[@key='en_US']/value">
+								<xsl:value-of select="Attributes/Map/entry[@key='sysDescriptions']/value/Map/entry[@key='en_US']/@value | Attributes/Map/entry[@key='sysDescriptions']/value/Map/entry[@key='en_US']/value" />
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="Attributes/Map/entry[@key='sysDescriptions']/value/Map/entry[1]/@value | Attributes/Map/entry[@key='sysDescriptions']/value/Map/entry[1]/value" />
+							</xsl:otherwise>
+						</xsl:choose>
 					</td>
 				</tr>
+				<xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='includeBundleDetails']/@value='true'">
+					<tr>
+						<td><b>Enable Activity Monitoring:</b></td>
+						<td>
+							<xsl:if test="ActivityConfig/@allEnabled = 'true'">
+								<xsl:text>Yes</xsl:text>
+							</xsl:if>
+						</td>
+					</tr>
+					<tr>
+						<td><b>Provision both profiles and policies:</b></td>
+						<td>
+							<xsl:if test="Attributes/Map/entry[@key='mergeTemplates']/@value = 'true' or Attributes/Map/entry[@key='mergeTemplates']/value/Boolean/text() = 'true'">
+								<xsl:text>Yes</xsl:text>
+							</xsl:if>
+						</td>
+					</tr>
+					<tr>
+						<td><b>Allow Multiple Assignments:</b></td>
+						<td>
+							<xsl:if test="Attributes/Map/entry[@key='allowMultipleAssignments']/@value = 'true' or Attributes/Map/entry[@key='allowMultipleAssignments']/value/Boolean/text() = 'true'">
+								<xsl:text>Yes</xsl:text>
+							</xsl:if>
+						</td>
+					</tr>
+					<tr>
+						<td><b>Allow Multiple Application Accounts:</b></td>
+						<td>
+							<xsl:if test="Attributes/Map/entry[@key='allowDuplicateAccounts']/@value = 'true' or Attributes/Map/entry[@key='allowDuplicateAccounts']/value/Boolean/text() = 'true'">
+								<xsl:text>Yes</xsl:text>
+							</xsl:if>
+						</td>
+					</tr>
+				</xsl:if>
 				<tr>
-					<td><b>Allow Multiple Assignments:</b></td>
+					<td><b>Disabled:</b></td>
 					<td>
-						<xsl:if test="Attributes/Map/entry[@key='allowMultipleAssignments']/@value = 'true' or Attributes/Map/entry[@key='allowMultipleAssignments']/value/Boolean/text() = 'true'">
+						<xsl:if test="@disabled = 'true'">
 							<xsl:text>Yes</xsl:text>
-				  	</xsl:if>
+						</xsl:if>
 					</td>
 				</tr>
-				<tr>
-					<td><b>Allow Multiple Application Accounts:</b></td>
-					<td>
-						<xsl:if test="Attributes/Map/entry[@key='allowDuplicateAccounts']/@value = 'true' or Attributes/Map/entry[@key='allowDuplicateAccounts']/value/Boolean/text() = 'true'">
-							<xsl:text>Yes</xsl:text>
-				  	</xsl:if>
-					</td>
-				</tr>
-			</xsl:if>
-			<tr>
-				<td><b>Disabled:</b></td>
-				<td>
-					<xsl:if test="@disabled = 'true'">
-						<xsl:text>Yes</xsl:text>
-			  	</xsl:if>
-				</td>
-			</tr>
-			<xsl:if test="@pendingDelete = 'true'">
-				<tr>
-					<td><b>Pending Delete:</b></td>
-					<td>Yes</td>
-				</tr>
+				<xsl:if test="@pendingDelete = 'true'">
+					<tr>
+						<td><b>Pending Delete:</b></td>
+						<td>Yes</td>
+					</tr>
+				</xsl:if>
 			</xsl:if>
 		</table>
 		
-		<xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='includeBundleDetails']/@value='true'">
+		<xsl:if test="not(document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='minimalRoleRelations']/@value='true') and document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='includeBundleDetails']/@value='true'">
 			<!-- Bundle Extended Attributes -->
 			<xsl:if test="//ObjectConfig[@name='Bundle']/ObjectAttribute">
 				<h4>Extended Attributes</h4>
@@ -199,13 +201,15 @@
 				</table>
 			</xsl:if>
 		</xsl:if>
-
-		<!-- Assignment Logic -->
-		<xsl:if test="Selector/IdentitySelector">
-			<h4>Assignment Rule</h4>
-			<xsl:for-each select="Selector/IdentitySelector">
-				<xsl:call-template name="processSingleIdentitySelector"/>
-			</xsl:for-each>
+		
+		<xsl:if test="not(document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='minimalRoleRelations']/@value='true')">
+			<!-- Assignment Logic -->
+			<xsl:if test="Selector/IdentitySelector">
+				<h4>Assignment Rule</h4>
+				<xsl:for-each select="Selector/IdentitySelector">
+					<xsl:call-template name="processSingleIdentitySelector"/>
+				</xsl:for-each>
+			</xsl:if>
 		</xsl:if>
 
 		<!-- Inherited Roles -->
@@ -256,7 +260,7 @@
 			</ul>
 		</xsl:if>
 		
-		<xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='includeBundleDetails']/@value='true'">
+		<xsl:if test="document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='minimalRoleRelations']/@value='true' or document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='includeBundleDetails']/@value='true'">
 			<!-- Required by other roles -->
 			<xsl:if test="//Bundle[Requirements/Reference[@name=$roleName]]">
 				<h4>Required by Roles</h4>
@@ -286,49 +290,53 @@
 			</xsl:if>
 		</xsl:if>
 
-		<!-- ProvisioningPlan -->
-		<xsl:if test="ProvisioningPlan">
-			<h4>Provisioning Plan</h4>
-			<xsl:for-each select="ProvisioningPlan">
-				<xsl:call-template name="processProvisioningPlan"/>
-			</xsl:for-each>
+		<xsl:if test="not(document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='minimalRoleRelations']/@value='true')">
+			<!-- ProvisioningPlan -->
+			<xsl:if test="ProvisioningPlan">
+				<h4>Provisioning Plan</h4>
+				<xsl:for-each select="ProvisioningPlan">
+					<xsl:call-template name="processProvisioningPlan"/>
+				</xsl:for-each>
+			</xsl:if>
 		</xsl:if>
 
-		<!-- Profiles -->
-		<xsl:if test="Profiles/Profile">
-			<h4>Entitlement Profiles (Entitlements included in the role)</h4>
-			<xsl:for-each select="Profiles/Profile">
-				<xsl:variable name="applicationName" select="ApplicationRef/Reference/@name" />
-				<table class="entitlementProfileTable">
-					<tr>
-						<th>Application</th>
-						<td>
-							<xsl:call-template name="applicationReferenceLink">
-								<xsl:with-param name="applicationName">
-									<xsl:value-of select="$applicationName"/>
-								</xsl:with-param>
-							</xsl:call-template>
-						</td>
-					</tr>
-					<tr>
-						<th>Constraints</th>
-						<td>
-							<xsl:for-each select="Constraints/node()">
-								<xsl:if test="name(.) = 'CompositeFilter'">
-									<xsl:call-template name="processCompositeFilter">
-									</xsl:call-template>
-								</xsl:if>
-								<xsl:if test="name(.) = 'Filter'">
-									<xsl:call-template name="processFilter">
-										<xsl:with-param name="lookupManagedAttributeDescription" select="'true'"/>
-										<xsl:with-param name="managedAttributeApplication" select="$applicationName"/>
-									</xsl:call-template>
-								</xsl:if>
-							</xsl:for-each>
-						</td>
-					</tr>
-				</table>
-			</xsl:for-each>
+		<xsl:if test="not(document('IdentityIQ-Documenter-Config.xsl')//iiqdoc:settings/iiqdoc:setting[@key='minimalRoleRelations']/@value='true')">
+			<!-- Profiles -->
+			<xsl:if test="Profiles/Profile">
+				<h4>Entitlement Profiles (Entitlements included in the role)</h4>
+				<xsl:for-each select="Profiles/Profile">
+					<xsl:variable name="applicationName" select="ApplicationRef/Reference/@name" />
+					<table class="entitlementProfileTable">
+						<tr>
+							<th>Application</th>
+							<td>
+								<xsl:call-template name="applicationReferenceLink">
+									<xsl:with-param name="applicationName">
+										<xsl:value-of select="$applicationName"/>
+									</xsl:with-param>
+								</xsl:call-template>
+							</td>
+						</tr>
+						<tr>
+							<th>Constraints</th>
+							<td>
+								<xsl:for-each select="Constraints/node()">
+									<xsl:if test="name(.) = 'CompositeFilter'">
+										<xsl:call-template name="processCompositeFilter">
+										</xsl:call-template>
+									</xsl:if>
+									<xsl:if test="name(.) = 'Filter'">
+										<xsl:call-template name="processFilter">
+											<xsl:with-param name="lookupManagedAttributeDescription" select="'true'"/>
+											<xsl:with-param name="managedAttributeApplication" select="$applicationName"/>
+										</xsl:call-template>
+									</xsl:if>
+								</xsl:for-each>
+							</td>
+						</tr>
+					</table>
+				</xsl:for-each>
+			</xsl:if>
 		</xsl:if>
 	</xsl:template>
 
